@@ -656,3 +656,214 @@ footer { padding: 34px 0 45px; border-top: 1px solid var(--line); }
   .demo-heart { display: none; }
   .demo-side .progress span.active { width: 100%; }
 }
+
+/* Faithful Khaya Kos mobile visitor preview */
+.khaya-visitor {
+  position: relative;
+  height: calc(100% - 52px);
+  overflow: hidden;
+  color: #243044;
+  background: #eef3f6;
+  font-family: "Nunito", sans-serif;
+}
+
+.khaya-nav {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  height: 51px;
+  align-items: center;
+  padding: 6px 12px;
+  border-bottom: 3px solid #efd66b;
+  background: #fff;
+}
+
+.khaya-home {
+  display: grid;
+  width: 35px;
+  height: 35px;
+  flex: none;
+  place-items: center;
+}
+.khaya-home img { width: 100%; height: 100%; }
+.khaya-brand { display: grid; margin-left: 7px; line-height: 1; }
+.khaya-brand strong { color: #17334e; font: 800 .86rem/1 "Baloo 2", sans-serif; }
+.khaya-brand small { margin-top: 2px; color: #3e774c; font-size: .48rem; font-weight: 800; }
+.khaya-menu { display: grid; gap: 4px; margin-left: auto; }
+.khaya-menu i { display: block; width: 21px; height: 2px; border-radius: 4px; background: #17334e; }
+
+.khaya-menu-view {
+  height: calc(100% - 51px);
+  overflow: hidden;
+  padding: 13px 11px 22px;
+  background: linear-gradient(180deg, #eef3f6 0%, #f6fafc 100%);
+}
+
+.khaya-heading { text-align: center; }
+.khaya-heading > span { color: #2e6a56; font-size: .46rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.khaya-heading > strong { display: block; margin-top: 2px; color: #17334e; font: 800 1.12rem/1 "Baloo 2", sans-serif; }
+.khaya-heading > p { margin: 3px auto 9px; color: #626a73; font-size: .49rem; line-height: 1.35; }
+
+.khaya-card {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(23,51,78,.08);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 18px rgba(35,54,70,.12);
+}
+
+.khaya-card-photo { position: relative; height: 244px; overflow: hidden; background: #3e678e; }
+.khaya-card-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity .28s ease, transform .28s ease;
+}
+.khaya-card-photo img.is-swapping { opacity: 0; transform: scale(.96); }
+.khaya-card-photo h3 {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  max-width: 83%;
+  margin: 0;
+  padding: 8px 11px;
+  border-radius: 0 0 11px 0;
+  color: #fff;
+  background: #17334e;
+  font: 800 .67rem/1.15 "Baloo 2", sans-serif;
+}
+.khaya-card-photo.is-purple h3 { background: #6a4a8a; }
+
+.khaya-card-body { padding: 11px 12px 12px; }
+.khaya-card-body ul { min-height: 46px; margin: 0; padding-left: 15px; color: #4d545d; font-size: .56rem; line-height: 1.5; }
+.khaya-card-body li::marker { color: #8f4d2d; }
+.khaya-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.khaya-price {
+  display: grid;
+  min-width: 46px;
+  min-height: 38px;
+  place-items: center;
+  padding: 0 10px;
+  border-radius: 13px;
+  color: #17334e;
+  background: #ffe887;
+  font: 800 .72rem "Baloo 2", sans-serif;
+}
+.khaya-price.is-changing { animation: khayaPriceUpdate .6s ease; }
+@keyframes khayaPriceUpdate { 45% { transform: scale(1.18); background: #efd05a; } }
+.khaya-like {
+  display: inline-flex;
+  min-width: 57px;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 0;
+  border-radius: 13px;
+  color: #a63a2e;
+  background: #faefed;
+  font: 800 .67rem "Nunito", sans-serif;
+}
+.khaya-like span { font-size: .93rem; }
+.khaya-like.is-liked { background: #f2dcda; animation: khayaLikePress .5s ease; }
+@keyframes khayaLikePress { 45% { transform: scale(.92); } }
+
+.khaya-sold {
+  position: absolute;
+  z-index: 6;
+  right: 17px;
+  top: 191px;
+  display: none;
+  width: 66px;
+  height: 66px;
+  place-items: center;
+  border: 4px double #a63a2e;
+  border-radius: 50%;
+  color: #a63a2e;
+  background: rgba(247,242,230,.92);
+  font: 800 .7rem/1 "Baloo 2", sans-serif;
+  text-align: center;
+  transform: rotate(-10deg);
+}
+.khaya-card.is-sold-out .khaya-sold { display: grid; animation: stampIn .45s cubic-bezier(.2,.8,.2,1.3); }
+.khaya-card.is-sold-out .khaya-card-photo img { filter: grayscale(.8); opacity: .72; }
+
+.khaya-market-view {
+  position: absolute;
+  z-index: 8;
+  inset: 51px 0 0;
+  overflow: hidden;
+  padding: 18px 10px 16px;
+  color: white;
+  background: linear-gradient(145deg, #2d684f 0%, #15334d 70%);
+  text-align: center;
+  animation: khayaMarketIn .5s ease;
+}
+@keyframes khayaMarketIn { from { opacity: 0; transform: translateY(30px); } }
+.khaya-open-toast {
+  width: fit-content;
+  margin: 0 auto 10px;
+  padding: 7px 10px;
+  border: 2px solid #efd66b;
+  border-radius: 999px;
+  background: rgba(16,41,57,.8);
+  font-size: .55rem;
+  font-weight: 800;
+  animation: toastDrop .5s ease;
+}
+@keyframes toastDrop { from { opacity: 0; transform: translateY(-16px); } }
+.khaya-market-eyebrow { color: #efd66b; font-size: .49rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+.khaya-market-view h3 { margin: 5px 0 2px; color: #fff; font: 800 1.45rem/1 "Baloo 2", sans-serif; }
+.khaya-market-view > p { margin: 0 auto 11px; color: rgba(255,255,255,.87); font-size: .53rem; line-height: 1.35; }
+.khaya-live-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px;
+  border: 1px solid #efd66b;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(11,34,50,.7);
+  font-size: .49rem;
+}
+.khaya-live-banner i { width: 7px; height: 7px; border-radius: 50%; background: #a63a2e; box-shadow: 0 0 0 3px rgba(217,154,43,.2); }
+.khaya-live-banner strong { color: #efd66b; }
+.khaya-market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; text-align: left; }
+.khaya-market-grid article { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,.7); border-radius: 13px; background: #fff; }
+.khaya-market-grid h4 { position: absolute; z-index: 2; top: 0; left: 0; max-width: 95%; margin: 0; padding: 7px 8px; border-radius: 0 0 8px 0; color: #fff; background: #b96f35; font: 800 .55rem "Baloo 2", sans-serif; }
+.khaya-market-grid article:nth-child(2) h4 { background: #2c5478; }
+.khaya-market-grid img { display: block; width: 100%; height: 137px; object-fit: cover; }
+.khaya-market-grid article > span { display: block; padding: 6px; color: #a63a2e; font-size: .48rem; font-weight: 800; text-align: center; }
+
+.owner-action {
+  margin-top: 14px;
+  padding: 12px;
+  border-left: 3px solid #d99a2b;
+  border-radius: 0 10px 10px 0;
+  background: #fff8e5;
+}
+.owner-action > span { display: block; color: #987021; font-size: .55rem; font-weight: 800; letter-spacing: .1em; }
+.owner-action strong { display: block; margin-top: 3px; color: #27322c; font-size: .78rem; }
+.owner-action small { display: block; margin-top: 4px; color: #6f786f; font-size: .63rem; line-height: 1.35; }
+.demo-side .story-card p { min-height: 82px; }
+
+.khaya-heart {
+  position: absolute;
+  z-index: 30;
+  color: #a63a2e;
+  pointer-events: none;
+  animation: khayaHeartFloat 1.3s ease-out var(--heart-delay, 0ms) forwards;
+}
+@keyframes khayaHeartFloat {
+  0% { opacity: 1; transform: translateY(0) scale(.8); }
+  20% { transform: translateY(-10px) scale(1.1); }
+  100% { opacity: 0; transform: translate(var(--heart-x),-72px) scale(.9); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .khaya-heart { display: none; }
+}

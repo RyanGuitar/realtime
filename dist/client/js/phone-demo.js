@@ -1,123 +1,109 @@
 import { DEMOS } from "./config.js";
 
-const DEMO_DURATION = 7800;
+const DEMO_DURATION = 7600;
 const CONFETTI_COLOURS = ["#d99a2b", "#a63a2e", "#4f7a3d", "#2f6f73", "#70486f", "#f7f2e6"];
 
-function getElements() {
-  return {
-    showcase: document.getElementById("demoShowcase"),
-    panel: document.getElementById("demo-panel"),
-    tabs: [...document.querySelectorAll(".demo-tab")],
-    customerView: document.getElementById("customerView"),
-    ownerView: document.getElementById("ownerView"),
-    cropView: document.getElementById("cropView"),
-    marketView: document.getElementById("marketView"),
-    productCard: document.getElementById("productCard"),
-    productPhoto: document.getElementById("productPhoto"),
-    ownerPhoto: document.getElementById("ownerPhoto"),
-    productName: document.getElementById("productName"),
-    productDescription: document.getElementById("productDescription"),
-    productPrice: document.getElementById("productPrice"),
-    soldStamp: document.getElementById("soldStamp"),
-    ownerProductName: document.getElementById("ownerProductName"),
-    ownerPrice: document.getElementById("ownerPrice"),
-    ownerStock: document.getElementById("ownerStock"),
-    changePhotoControl: document.getElementById("changePhotoControl"),
-    cropUseButton: document.getElementById("cropUseButton"),
-    likeButton: document.getElementById("likeButton"),
-    likeIcon: document.getElementById("likeIcon"),
-    likeCount: document.getElementById("likeCount"),
-    marketSwitch: document.getElementById("marketSwitch"),
-    marketState: document.getElementById("marketState"),
-    marketAction: document.getElementById("marketAction"),
-    livePill: document.getElementById("livePill"),
-    storyCount: document.getElementById("storyCount"),
-    storyTitle: document.getElementById("storyTitle"),
-    storyText: document.getElementById("storyText"),
-    status: document.getElementById("demoStatus"),
-    progress: document.querySelector(".demo-side .progress span"),
-    replay: document.getElementById("replayDemo"),
-  };
+function collectRoles(root) {
+  return [...root.querySelectorAll("[data-role]")].reduce((roles, element) => {
+    const key = element.dataset.role.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+    roles[key] = element;
+    return roles;
+  }, {});
 }
 
-function showView(elements, view) {
-  elements.customerView.hidden = view !== "customer";
-  elements.ownerView.hidden = view !== "owner";
-  elements.cropView.hidden = view !== "crop";
+function replaceList(list, items) {
+  list.replaceChildren(...items.map((text) => {
+    const item = document.createElement("li");
+    item.textContent = text;
+    return item;
+  }));
 }
 
-function setStatus(elements, text, pill = "Owner is editing") {
-  elements.status.textContent = text;
-  elements.livePill.textContent = pill;
-  elements.livePill.classList.toggle("is-live", pill.includes("live") || pill.includes("Live"));
+function setAction(roles, title, detail) {
+  roles.ownerActionTitle.textContent = title;
+  roles.ownerActionDetail.textContent = detail;
 }
 
-function restartProgress(elements, reducedMotion) {
-  elements.progress.classList.remove("active");
-  void elements.progress.offsetWidth;
-  if (!reducedMotion) elements.progress.classList.add("active");
+function setStatus(roles, message, pill = "Customer view") {
+  roles.demoStatus.textContent = message;
+  roles.livePill.textContent = pill;
+  roles.livePill.classList.toggle("is-live", /live|open/i.test(pill));
 }
 
-function resetDemo(elements) {
-  elements.showcase.querySelectorAll(".demo-heart, .demo-confetti").forEach((node) => node.remove());
-  showView(elements, "customer");
-  elements.marketView.hidden = true;
-  elements.productCard.hidden = false;
-  elements.productCard.className = "kk-card";
-  elements.productPhoto.className = "kk-photo kk-photo-muffin";
-  elements.ownerPhoto.className = "owner-photo kk-photo kk-photo-muffin";
-  elements.productName.textContent = "Cappuccino Muffins";
-  elements.productDescription.textContent = "Soft coffee muffins with a sweet café-style finish.";
-  elements.productPrice.textContent = "R35";
-  elements.productPrice.className = "kk-price";
-  elements.ownerProductName.value = "Cappuccino Muffins";
-  elements.ownerPrice.value = "35";
-  elements.ownerStock.value = "6";
-  elements.ownerPrice.classList.remove("is-editing");
-  elements.ownerStock.classList.remove("is-editing");
-  elements.changePhotoControl.classList.remove("is-tapped");
-  elements.cropUseButton.classList.remove("is-tapped");
-  elements.likeButton.classList.remove("is-liked");
-  elements.likeIcon.textContent = "♡";
-  elements.likeCount.textContent = "12";
-  elements.marketSwitch.className = "market-switch";
-  elements.marketState.textContent = "Market closed";
-  elements.marketAction.textContent = "Tap to open";
-  elements.livePill.classList.remove("is-live");
+function resetVisitor(roles, root) {
+  root.querySelectorAll(".khaya-heart, .demo-confetti").forEach((element) => element.remove());
+  roles.menuView.hidden = false;
+  roles.marketView.hidden = true;
+  roles.productCard.className = "khaya-card";
+  roles.productPhoto.className = "khaya-card-photo";
+  roles.productImage.className = "";
+  roles.productImage.src = "assets/khaya/cappuccino-muffins.svg";
+  roles.productImage.alt = "Cappuccino Muffins";
+  roles.productName.textContent = "Cappuccino Muffins";
+  replaceList(roles.productDescription, [
+    "Coffee-swirled sponge, whipped topping",
+    "Baked fresh to order",
+  ]);
+  roles.productPrice.textContent = "R18";
+  roles.productPrice.className = "khaya-price";
+  roles.likeButton.classList.remove("is-liked");
+  roles.likeIcon.textContent = "♡";
+  roles.likeCount.textContent = "0";
+  roles.livePill.classList.remove("is-live");
+}
+
+function restartProgress(progress, reducedMotion) {
+  progress.classList.remove("active");
+  progress.style.width = "";
+  void progress.offsetWidth;
+  if (reducedMotion) progress.style.width = "100%";
+  else progress.classList.add("active");
 }
 
 function schedule(timers, delay, callback) {
   timers.push(window.setTimeout(callback, delay));
 }
 
-function animateCard(elements) {
-  elements.productCard.classList.remove("is-updated");
-  void elements.productCard.offsetWidth;
-  elements.productCard.classList.add("is-updated");
+function swapProductPhoto(roles) {
+  roles.productImage.classList.add("is-swapping");
+  window.setTimeout(() => {
+    roles.productImage.src = "assets/khaya/carrot-cake-muffins.svg";
+    roles.productImage.alt = "Carrot Cake Muffins";
+    roles.productName.textContent = "Carrot Cake Muffins";
+    roles.productPhoto.classList.add("is-purple");
+    replaceList(roles.productDescription, [
+      "Cream cheese icing, toasted walnut",
+      "Made with fresh farm carrots",
+    ]);
+    roles.productPrice.textContent = "R20";
+    roles.productImage.classList.remove("is-swapping");
+  }, 300);
 }
 
-function spawnHearts(elements, count = 6, ambient = false) {
+function spawnLikeHearts(root, button, count = 5, ambient = false) {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const rootRect = root.getBoundingClientRect();
+  const buttonRect = button.getBoundingClientRect();
+  const originX = ambient ? 18 : buttonRect.left - rootRect.left + buttonRect.width / 2;
+  const originY = ambient ? rootRect.height - 90 : buttonRect.top - rootRect.top + 4;
 
   for (let index = 0; index < count; index += 1) {
     const heart = document.createElement("span");
-    heart.className = "demo-heart";
+    heart.className = "khaya-heart";
     heart.setAttribute("aria-hidden", "true");
     heart.textContent = "❤";
-    heart.style.setProperty("--heart-delay", `${index * 80}ms`);
-    heart.style.setProperty("--heart-x", `${(index - (count - 1) / 2) * (ambient ? 15 : 10)}px`);
-    heart.style.setProperty("--heart-turn", `${(index - 2) * 7}deg`);
-    if (ambient) {
-      heart.style.left = `${8 + index * 3}%`;
-      heart.style.top = "78%";
-      heart.style.fontSize = "1.5rem";
-    }
-    elements.showcase.appendChild(heart);
-    window.setTimeout(() => heart.remove(), 1700);
+    heart.style.left = `${originX + (Math.random() * 24 - 12)}px`;
+    heart.style.top = `${originY + (Math.random() * 8 - 4)}px`;
+    heart.style.setProperty("--heart-delay", `${index * 70}ms`);
+    heart.style.setProperty("--heart-x", `${Math.random() * 30 - 15}px`);
+    if (ambient) heart.style.fontSize = "1.35rem";
+    root.appendChild(heart);
+    window.setTimeout(() => heart.remove(), 1500);
   }
 }
 
-function celebrateMarketOpen(elements) {
+function celebrateMarketOpen(root) {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   for (let index = 0; index < 70; index += 1) {
@@ -126,142 +112,113 @@ function celebrateMarketOpen(elements) {
     piece.setAttribute("aria-hidden", "true");
     piece.style.setProperty("--confetti-left", `${Math.random() * 100}%`);
     piece.style.setProperty("--confetti-colour", CONFETTI_COLOURS[index % CONFETTI_COLOURS.length]);
-    piece.style.setProperty("--confetti-delay", `${Math.random() * .65}s`);
-    piece.style.setProperty("--confetti-duration", `${2.4 + Math.random() * 1.5}s`);
-    piece.style.setProperty("--confetti-drift", `${Math.random() * 150 - 75}px`);
+    piece.style.setProperty("--confetti-delay", `${Math.random() * .8}s`);
+    piece.style.setProperty("--confetti-duration", `${2.5 + Math.random() * 1.8}s`);
+    piece.style.setProperty("--confetti-drift", `${Math.random() * 160 - 80}px`);
     piece.style.setProperty("--confetti-turn", `${360 + Math.random() * 720}deg`);
-    elements.showcase.appendChild(piece);
-    window.setTimeout(() => piece.remove(), 4800);
+    root.appendChild(piece);
+    window.setTimeout(() => piece.remove(), 5200);
   }
 }
 
-function runPhotoDemo(elements, timers) {
-  showView(elements, "owner");
-  setStatus(elements, "Opening the owner photo controls…");
+function runPhotoDemo(root, roles, timers) {
+  setAction(roles, "Choose a new product photo", "The customer continues seeing the original Cappuccino Muffins card.");
+  setStatus(roles, "Customer currently sees the original product.");
 
-  schedule(timers, 1100, () => {
-    elements.changePhotoControl.classList.add("is-tapped");
-    setStatus(elements, "Choosing a new product photo…");
+  schedule(timers, 1650, () => {
+    setAction(roles, "Frame it inside the square", "Khaya Kos compresses and crops every owner photo before publishing.");
+    setStatus(roles, "The current product remains stable while the photo is prepared.");
   });
-  schedule(timers, 2000, () => {
-    showView(elements, "crop");
-    setStatus(elements, "Framing the photo for a perfect square…");
+  schedule(timers, 3550, () => {
+    setAction(roles, "Tap “Use this photo”", "The saved image is sent once and the visitor card is patched in place.");
+    setStatus(roles, "The new photo is syncing…", "Updating live");
   });
-  schedule(timers, 4300, () => {
-    elements.cropUseButton.classList.add("is-tapped");
-    setStatus(elements, "Publishing the new image…", "Syncing now");
-  });
-  schedule(timers, 5050, () => {
-    elements.productPhoto.className = "kk-photo kk-photo-cake";
-    elements.productName.textContent = "Carrot Cake Muffins";
-    elements.productDescription.textContent = "Moist spiced muffins finished with a creamy topping.";
-    showView(elements, "customer");
-    animateCard(elements);
-    setStatus(elements, "Customers can already see the new photo.", "Photo updated live");
+  schedule(timers, 4550, () => {
+    swapProductPhoto(roles);
+    setStatus(roles, "The same card now shows the new product photo.", "Updated live");
   });
 }
 
-function runProductDemo(elements, timers) {
-  showView(elements, "owner");
-  setStatus(elements, "The owner is changing today’s price…");
+function runProductDemo(roles, timers) {
+  setAction(roles, "Change the product price", "The owner edits R18 to R20 in the focused inventory workspace.");
+  setStatus(roles, "The visitor still sees R18 until the change arrives.");
 
-  schedule(timers, 1250, () => {
-    elements.ownerPrice.classList.add("is-editing");
-    elements.ownerPrice.value = "40";
-    setStatus(elements, "R35 becomes R40—no developer needed.");
-  });
-  schedule(timers, 2600, () => {
-    elements.productPrice.textContent = "R40";
-    elements.productPrice.classList.add("is-changing");
-    showView(elements, "customer");
-    animateCard(elements);
-    setStatus(elements, "The new price is visible immediately.", "Price updated live");
-  });
-  schedule(timers, 4300, () => {
-    showView(elements, "owner");
-    elements.ownerStock.classList.add("is-editing");
-    elements.ownerStock.value = "0";
-    setStatus(elements, "The last item just sold at the market…");
-  });
-  schedule(timers, 5550, () => {
-    showView(elements, "customer");
-    elements.productCard.classList.add("is-sold-out");
-    setStatus(elements, "Sold out is now unmistakable to customers.", "Stock updated live");
-  });
-}
-
-function runLikesDemo(elements, timers) {
-  showView(elements, "customer");
-  setStatus(elements, "A customer has found a favourite…", "Customer view");
-
-  schedule(timers, 1550, () => {
-    elements.likeButton.classList.add("is-liked");
-    elements.likeIcon.textContent = "❤";
-    elements.likeCount.textContent = "13";
-    spawnHearts(elements);
-    setStatus(elements, "Their like appears instantly for everyone.", "Liked live");
+  schedule(timers, 1800, () => {
+    roles.productPrice.textContent = "R20";
+    roles.productPrice.classList.add("is-changing");
+    setStatus(roles, "The yellow price tag updates to R20.", "Price updated live");
   });
   schedule(timers, 3800, () => {
-    elements.likeCount.textContent = "14";
-    spawnHearts(elements, 4, true);
-    setStatus(elements, "Someone else is liking it right now.", "Another live like");
+    setAction(roles, "Record the last item sold", "At zero stock, Khaya Kos applies its real market sold-out treatment.");
+    setStatus(roles, "The final stock update is arriving…", "Stock syncing");
   });
-  schedule(timers, 5700, () => {
-    elements.likeCount.textContent = "15";
-    spawnHearts(elements, 5, true);
-    setStatus(elements, "Real activity makes the business feel busy.", "15 people love this");
+  schedule(timers, 5050, () => {
+    roles.productCard.classList.add("is-sold-out");
+    setStatus(roles, "The product is now clearly marked Sold Out.", "Stock updated live");
   });
 }
 
-function runMarketDemo(elements, timers) {
-  showView(elements, "owner");
-  setStatus(elements, "The Saturday stall is ready to open…");
+function runLikesDemo(root, roles, timers) {
+  setAction(roles, "A visitor taps the heart", "This is a public interaction—no owner login or page reload is needed.");
+  setStatus(roles, "The real Khaya Kos like button is ready.");
 
-  schedule(timers, 1500, () => {
-    elements.marketSwitch.classList.add("is-opening");
-    setStatus(elements, "The owner taps one clear control…");
+  schedule(timers, 1700, () => {
+    roles.likeButton.classList.add("is-liked");
+    roles.likeIcon.textContent = "❤";
+    roles.likeCount.textContent = "1";
+    spawnLikeHearts(root, roles.likeButton);
+    setStatus(roles, "Five hearts rise from the button as the count becomes 1.", "Liked live");
   });
-  schedule(timers, 2350, () => {
-    elements.marketSwitch.className = "market-switch is-open";
-    elements.marketState.textContent = "Market open";
-    elements.marketAction.textContent = "Live for visitors";
-    setStatus(elements, "Market day is now live for everyone.", "Market is live");
-  });
-  schedule(timers, 3200, () => {
-    showView(elements, "customer");
-    elements.productCard.hidden = true;
-    elements.marketView.hidden = false;
-    celebrateMarketOpen(elements);
-    setStatus(elements, "Live products, stock and directions appear together.", "Open now · Gazebo Valley");
+  schedule(timers, 4200, () => {
+    setAction(roles, "Someone else likes it", "Ambient hearts show visitors that another person is active on the site.");
+    roles.likeCount.textContent = "2";
+    spawnLikeHearts(root, roles.likeButton, 3, true);
+    setStatus(roles, "Another live like arrives from a different visitor.", "2 live likes");
   });
 }
 
-function showReducedMotionFinal(elements, demoName) {
-  if (demoName === "photo") {
-    elements.productPhoto.className = "kk-photo kk-photo-cake";
-    elements.productName.textContent = "Carrot Cake Muffins";
-    setStatus(elements, "The new customer-facing photo is live.", "Photo updated live");
-  } else if (demoName === "product") {
-    elements.productPrice.textContent = "R40";
-    elements.productCard.classList.add("is-sold-out");
-    setStatus(elements, "The new price and sold-out state are live.", "Stock updated live");
-  } else if (demoName === "likes") {
-    elements.likeButton.classList.add("is-liked");
-    elements.likeIcon.textContent = "❤";
-    elements.likeCount.textContent = "15";
-    setStatus(elements, "The live like total is now 15.", "Liked live");
-  } else {
-    elements.productCard.hidden = true;
-    elements.marketView.hidden = false;
-    setStatus(elements, "The Saturday market is open for customers.", "Market is live");
+function runMarketDemo(root, roles, timers) {
+  setAction(roles, "Tap “Market closed”", "The owner’s market toggle publishes today’s prepared stock.");
+  setStatus(roles, "Visitors currently see the regular weekly menu.");
+
+  schedule(timers, 1900, () => {
+    setAction(roles, "Market is now open", "Every connected visitor receives the live market state instantly.");
+    setStatus(roles, "The site is switching to today’s market view…", "Opening market");
+  });
+  schedule(timers, 2800, () => {
+    roles.menuView.hidden = true;
+    roles.marketView.hidden = false;
+    celebrateMarketOpen(root);
+    setStatus(roles, "The visitor is taken to live stock under the confetti.", "Open now · Gazebo Valley");
+  });
+}
+
+function showReducedMotionFinal(root, roles, demoName) {
+  if (demoName === "photo") swapProductPhoto(roles);
+  if (demoName === "product") {
+    roles.productPrice.textContent = "R20";
+    roles.productCard.classList.add("is-sold-out");
   }
-  elements.progress.style.width = "100%";
+  if (demoName === "likes") {
+    roles.likeButton.classList.add("is-liked");
+    roles.likeIcon.textContent = "❤";
+    roles.likeCount.textContent = "2";
+  }
+  if (demoName === "market") {
+    roles.menuView.hidden = true;
+    roles.marketView.hidden = false;
+  }
+  setStatus(roles, "Final customer-visible state shown.", "Customer view");
 }
 
 export function initialisePhoneDemo() {
-  const elements = getElements();
-  if (!elements.showcase) return;
+  const root = document.querySelector("[data-demo-showcase]");
+  if (!root) return;
 
+  const roles = collectRoles(root);
+  const tabs = [...root.querySelectorAll("[role='tab']")];
+  const panel = root.querySelector("[role='tabpanel']");
+  const progress = root.querySelector(".progress span");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let activeDemo = "photo";
   let timers = [];
@@ -274,48 +231,49 @@ export function initialisePhoneDemo() {
   function play(demoName) {
     clearTimers();
     activeDemo = demoName;
-    resetDemo(elements);
-    const copy = DEMOS[demoName];
-    elements.storyCount.textContent = copy.count;
-    elements.storyTitle.textContent = copy.title;
-    elements.storyText.textContent = copy.text;
-    restartProgress(elements, reducedMotion);
+    resetVisitor(roles, root);
 
-    elements.tabs.forEach((tab) => {
+    const copy = DEMOS[demoName];
+    roles.storyCount.textContent = copy.count;
+    roles.storyTitle.textContent = copy.title;
+    roles.storyText.textContent = copy.text;
+    restartProgress(progress, reducedMotion);
+
+    tabs.forEach((tab) => {
       const selected = tab.dataset.demo === demoName;
       tab.classList.toggle("is-active", selected);
       tab.setAttribute("aria-selected", String(selected));
       tab.tabIndex = selected ? 0 : -1;
     });
-    const activeTab = elements.tabs.find((tab) => tab.dataset.demo === demoName);
-    if (activeTab) elements.panel.setAttribute("aria-labelledby", activeTab.id);
+    panel.setAttribute("aria-labelledby", tabs.find((tab) => tab.dataset.demo === demoName).id);
 
     if (reducedMotion) {
-      showReducedMotionFinal(elements, demoName);
+      showReducedMotionFinal(root, roles, demoName);
       return;
     }
 
-    if (demoName === "photo") runPhotoDemo(elements, timers);
-    if (demoName === "product") runProductDemo(elements, timers);
-    if (demoName === "likes") runLikesDemo(elements, timers);
-    if (demoName === "market") runMarketDemo(elements, timers);
+    if (demoName === "photo") runPhotoDemo(root, roles, timers);
+    if (demoName === "product") runProductDemo(roles, timers);
+    if (demoName === "likes") runLikesDemo(root, roles, timers);
+    if (demoName === "market") runMarketDemo(root, roles, timers);
   }
 
-  elements.tabs.forEach((tab, tabIndex) => {
+  tabs.forEach((tab, tabIndex) => {
     tab.addEventListener("click", () => play(tab.dataset.demo));
     tab.addEventListener("keydown", (event) => {
       if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
       event.preventDefault();
       let nextIndex = tabIndex;
-      if (event.key === "ArrowLeft") nextIndex = (tabIndex - 1 + elements.tabs.length) % elements.tabs.length;
-      if (event.key === "ArrowRight") nextIndex = (tabIndex + 1) % elements.tabs.length;
+      if (event.key === "ArrowLeft") nextIndex = (tabIndex - 1 + tabs.length) % tabs.length;
+      if (event.key === "ArrowRight") nextIndex = (tabIndex + 1) % tabs.length;
       if (event.key === "Home") nextIndex = 0;
-      if (event.key === "End") nextIndex = elements.tabs.length - 1;
-      elements.tabs[nextIndex].focus();
-      play(elements.tabs[nextIndex].dataset.demo);
+      if (event.key === "End") nextIndex = tabs.length - 1;
+      tabs[nextIndex].focus();
+      play(tabs[nextIndex].dataset.demo);
     });
   });
 
-  elements.replay.addEventListener("click", () => play(activeDemo));
+  roles.replay.addEventListener("click", () => play(activeDemo));
+  root.style.setProperty("--demo-duration", `${DEMO_DURATION}ms`);
   play(activeDemo);
 }

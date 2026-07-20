@@ -6,5 +6,6 @@ await mkdir("dist/client", { recursive: true });
 await cp("index.html", "dist/client/index.html");
 await cp("css", "dist/client/css", { recursive: true });
 await cp("js", "dist/client/js", { recursive: true });
+await cp("assets", "dist/client/assets", { recursive: true });
 await cp("worker.js", "dist/server/index.js");
 console.log("Built the static website for hosting.");
