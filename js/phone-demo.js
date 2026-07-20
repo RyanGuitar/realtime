@@ -1,14 +1,24 @@
-import { DEMOS } from "./config.js";
-
-const DEMO_DURATION = 7600;
 const CONFETTI_COLOURS = ["#d99a2b", "#a63a2e", "#4f7a3d", "#2f6f73", "#70486f", "#f7f2e6"];
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-function collectRoles(root) {
+function getRoles(root) {
   return [...root.querySelectorAll("[data-role]")].reduce((roles, element) => {
     const key = element.dataset.role.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
     roles[key] = element;
     return roles;
   }, {});
+}
+
+function schedule(timers, delay, callback) {
+  timers.push(window.setTimeout(callback, delay));
+}
+
+function setStatus(roles, message) {
+  roles.status.textContent = message;
+}
+
+function setHidden(element, hidden) {
+  element.hidden = hidden;
 }
 
 function replaceList(list, items) {
@@ -19,261 +29,270 @@ function replaceList(list, items) {
   }));
 }
 
-function setAction(roles, title, detail) {
-  roles.ownerActionTitle.textContent = title;
-  roles.ownerActionDetail.textContent = detail;
-}
-
-function setStatus(roles, message, pill = "Customer view") {
-  roles.demoStatus.textContent = message;
-  roles.livePill.textContent = pill;
-  roles.livePill.classList.toggle("is-live", /live|open/i.test(pill));
-}
-
-function resetVisitor(roles, root) {
-  root.querySelectorAll(".khaya-heart, .demo-confetti").forEach((element) => element.remove());
-  roles.menuView.hidden = false;
-  roles.marketView.hidden = true;
-  roles.productCard.className = "khaya-card";
-  roles.productPhoto.className = "khaya-card-photo";
-  roles.productImage.className = "";
-  roles.productImage.src = "assets/khaya/cappuccino-muffins.svg";
-  roles.productImage.alt = "Cappuccino Muffins";
-  roles.productName.textContent = "Cappuccino Muffins";
-  replaceList(roles.productDescription, [
-    "Coffee-swirled sponge, whipped topping",
-    "Baked fresh to order",
-  ]);
-  roles.productPrice.textContent = "R18";
-  roles.productPrice.className = "khaya-price";
-  roles.likeButton.classList.remove("is-liked");
-  roles.likeIcon.textContent = "♡";
-  roles.likeCount.textContent = "0";
-  roles.livePill.classList.remove("is-live");
-}
-
-function restartProgress(progress, reducedMotion) {
-  progress.classList.remove("active");
-  progress.style.width = "";
-  void progress.offsetWidth;
-  if (reducedMotion) progress.style.width = "100%";
-  else progress.classList.add("active");
-}
-
-function schedule(timers, delay, callback) {
-  timers.push(window.setTimeout(callback, delay));
-}
-
-function swapProductPhoto(roles) {
-  roles.productImage.classList.add("is-swapping");
-  window.setTimeout(() => {
-    roles.productImage.src = "assets/khaya/carrot-cake-muffins.svg";
-    roles.productImage.alt = "Carrot Cake Muffins";
-    roles.productName.textContent = "Carrot Cake Muffins";
-    roles.productPhoto.classList.add("is-purple");
-    replaceList(roles.productDescription, [
-      "Cream cheese icing, toasted walnut",
-      "Made with fresh farm carrots",
-    ]);
-    roles.productPrice.textContent = "R20";
-    roles.productImage.classList.remove("is-swapping");
-  }, 300);
-}
-
-function spawnLikeHearts(root, button, count = 5, ambient = false) {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
+function spawnHearts(root, button, count = 5, ambient = false) {
+  if (reducedMotion) return;
   const rootRect = root.getBoundingClientRect();
   const buttonRect = button.getBoundingClientRect();
-  const originX = ambient ? 18 : buttonRect.left - rootRect.left + buttonRect.width / 2;
-  const originY = ambient ? rootRect.height - 90 : buttonRect.top - rootRect.top + 4;
+  const startX = ambient ? rootRect.width * 0.72 : buttonRect.left - rootRect.left + buttonRect.width / 2;
+  const startY = ambient ? rootRect.height * 0.68 : buttonRect.top - rootRect.top + 4;
 
   for (let index = 0; index < count; index += 1) {
     const heart = document.createElement("span");
     heart.className = "khaya-heart";
     heart.setAttribute("aria-hidden", "true");
     heart.textContent = "❤";
-    heart.style.left = `${originX + (Math.random() * 24 - 12)}px`;
-    heart.style.top = `${originY + (Math.random() * 8 - 4)}px`;
-    heart.style.setProperty("--heart-delay", `${index * 70}ms`);
-    heart.style.setProperty("--heart-x", `${Math.random() * 30 - 15}px`);
-    if (ambient) heart.style.fontSize = "1.35rem";
+    heart.style.left = `${startX + (Math.random() * 30 - 15)}px`;
+    heart.style.top = `${startY + (Math.random() * 8 - 4)}px`;
+    heart.style.setProperty("--heart-delay", `${index * 75}ms`);
+    heart.style.setProperty("--heart-x", `${Math.random() * 40 - 20}px`);
     root.appendChild(heart);
-    window.setTimeout(() => heart.remove(), 1500);
+    window.setTimeout(() => heart.remove(), 1550);
   }
 }
 
 function celebrateMarketOpen(root) {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
+  if (reducedMotion) return;
   for (let index = 0; index < 70; index += 1) {
     const piece = document.createElement("span");
     piece.className = "demo-confetti";
     piece.setAttribute("aria-hidden", "true");
     piece.style.setProperty("--confetti-left", `${Math.random() * 100}%`);
     piece.style.setProperty("--confetti-colour", CONFETTI_COLOURS[index % CONFETTI_COLOURS.length]);
-    piece.style.setProperty("--confetti-delay", `${Math.random() * .8}s`);
-    piece.style.setProperty("--confetti-duration", `${2.5 + Math.random() * 1.8}s`);
-    piece.style.setProperty("--confetti-drift", `${Math.random() * 160 - 80}px`);
+    piece.style.setProperty("--confetti-delay", `${Math.random() * .65}s`);
+    piece.style.setProperty("--confetti-duration", `${2.6 + Math.random() * 1.7}s`);
+    piece.style.setProperty("--confetti-drift", `${Math.random() * 150 - 75}px`);
     piece.style.setProperty("--confetti-turn", `${360 + Math.random() * 720}deg`);
     root.appendChild(piece);
-    window.setTimeout(() => piece.remove(), 5200);
+    window.setTimeout(() => piece.remove(), 5000);
   }
 }
 
-function runPhotoDemo(root, roles, timers) {
-  setAction(roles, "Choose a new product photo", "The customer continues seeing the original Cappuccino Muffins card.");
-  setStatus(roles, "Customer currently sees the original product.");
-
-  schedule(timers, 1650, () => {
-    setAction(roles, "Frame it inside the square", "Khaya Kos compresses and crops every owner photo before publishing.");
-    setStatus(roles, "The current product remains stable while the photo is prepared.");
-  });
-  schedule(timers, 3550, () => {
-    setAction(roles, "Tap “Use this photo”", "The saved image is sent once and the visitor card is patched in place.");
-    setStatus(roles, "The new photo is syncing…", "Updating live");
-  });
-  schedule(timers, 4550, () => {
-    swapProductPhoto(roles);
-    setStatus(roles, "The same card now shows the new product photo.", "Updated live");
-  });
+function resetPhoto(root, roles) {
+  root.classList.remove("is-complete");
+  roles.changePhoto.classList.remove("is-tapped");
+  roles.takePhoto.classList.remove("is-tapped");
+  roles.cameraFlash.classList.remove("is-flashing");
+  roles.usePhoto.classList.remove("is-tapped");
+  roles.realtimeBeam.classList.remove("is-sending");
+  roles.zoomLevel.classList.remove("is-zooming");
+  setHidden(roles.photoSheet, true);
+  setHidden(roles.cropModal, true);
+  roles.ownerImage.src = "assets/khaya/cappuccino-muffins.svg";
+  roles.visitorImage.src = "assets/khaya/cappuccino-muffins.svg";
+  roles.visitorImage.alt = "Cappuccino Muffins";
+  roles.visitorName.textContent = "Cappuccino Muffins";
+  roles.visitorPhoto.classList.remove("is-purple");
+  roles.visitorCard.classList.remove("is-live-updated");
+  roles.visitorPrice.textContent = "R18";
+  replaceList(roles.visitorDescription, ["Coffee-swirled sponge, whipped topping", "Baked fresh to order"]);
+  roles.visitorLabel.textContent = "Visitor’s phone";
+  roles.visitorLabel.classList.remove("is-updated");
+  setStatus(roles, "The owner is ready to change the product photo.");
 }
 
-function runProductDemo(roles, timers) {
-  setAction(roles, "Change the product price", "The owner edits R18 to R20 in the focused inventory workspace.");
-  setStatus(roles, "The visitor still sees R18 until the change arrives.");
+function finishPhoto(root, roles) {
+  setHidden(roles.cropModal, true);
+  roles.ownerImage.src = "assets/khaya/carrot-cake-muffins.svg";
+  roles.visitorImage.classList.add("is-swapping");
+  roles.realtimeBeam.classList.add("is-sending");
+  window.setTimeout(() => {
+    roles.visitorImage.src = "assets/khaya/carrot-cake-muffins.svg";
+    roles.visitorImage.alt = "Carrot Cake Muffins";
+    roles.visitorName.textContent = "Carrot Cake Muffins";
+    roles.visitorPhoto.classList.add("is-purple");
+    roles.visitorPrice.textContent = "R20";
+    replaceList(roles.visitorDescription, ["Cream cheese icing, toasted walnut", "Made with fresh farm carrots"]);
+    roles.visitorImage.classList.remove("is-swapping");
+    roles.visitorCard.classList.add("is-live-updated");
+    roles.visitorLabel.textContent = "Updated live";
+    roles.visitorLabel.classList.add("is-updated");
+    root.classList.add("is-complete");
+  }, reducedMotion ? 0 : 320);
+  setStatus(roles, "The new photo appears on the visitor’s phone in real time.");
+}
 
-  schedule(timers, 1800, () => {
+function playPhoto(root, roles, timers) {
+  resetPhoto(root, roles);
+  if (reducedMotion) {
+    finishPhoto(root, roles);
+    return;
+  }
+  schedule(timers, 900, () => {
+    roles.changePhoto.classList.add("is-tapped");
+    setStatus(roles, "The owner taps “Change photo”.");
+  });
+  schedule(timers, 1700, () => {
+    setHidden(roles.photoSheet, false);
+    setStatus(roles, "Take a new photo, or choose one from the phone’s library.");
+  });
+  schedule(timers, 2700, () => {
+    roles.takePhoto.classList.add("is-tapped");
+    roles.cameraFlash.classList.add("is-flashing");
+    setStatus(roles, "The owner chooses “Take Photo” and captures the new product.");
+  });
+  schedule(timers, 3500, () => {
+    setHidden(roles.photoSheet, true);
+    setHidden(roles.cropModal, false);
+    setStatus(roles, "Khaya Kos opens its square crop tool.");
+  });
+  schedule(timers, 4800, () => {
+    roles.zoomLevel.classList.add("is-zooming");
+    setStatus(roles, "Drag to frame the product, then adjust the zoom.");
+  });
+  schedule(timers, 6200, () => {
+    roles.usePhoto.classList.add("is-tapped");
+    setStatus(roles, "The owner taps “Use this photo”.");
+  });
+  schedule(timers, 6950, () => finishPhoto(root, roles));
+}
+
+function resetProduct(root, roles) {
+  root.classList.remove("is-complete");
+  roles.ownerControl.classList.remove("is-editing", "is-sold");
+  roles.ownerPrice.textContent = "18";
+  roles.ownerStock.textContent = "1";
+  roles.productPrice.textContent = "R18";
+  roles.productPrice.classList.remove("is-changing");
+  roles.productCard.classList.remove("is-sold-out", "is-live-updated");
+  setStatus(roles, "The customer currently sees R18 and one item remaining.");
+}
+
+function playProduct(root, roles, timers) {
+  resetProduct(root, roles);
+  const finish = () => {
+    roles.ownerStock.textContent = "0";
+    roles.ownerControl.classList.add("is-sold");
+    roles.productCard.classList.add("is-sold-out", "is-live-updated");
+    root.classList.add("is-complete");
+    setStatus(roles, "The last sale is recorded and the visitor sees Sold Out.");
+  };
+  if (reducedMotion) {
+    roles.ownerPrice.textContent = "20";
+    roles.productPrice.textContent = "R20";
+    finish();
+    return;
+  }
+  schedule(timers, 1000, () => {
+    roles.ownerControl.classList.add("is-editing");
+    roles.ownerPrice.textContent = "20";
+    setStatus(roles, "The owner changes the price from R18 to R20.");
+  });
+  schedule(timers, 2200, () => {
     roles.productPrice.textContent = "R20";
     roles.productPrice.classList.add("is-changing");
-    setStatus(roles, "The yellow price tag updates to R20.", "Price updated live");
+    roles.productCard.classList.add("is-live-updated");
+    setStatus(roles, "R20 appears on the visitor’s phone without a refresh.");
   });
-  schedule(timers, 3800, () => {
-    setAction(roles, "Record the last item sold", "At zero stock, Khaya Kos applies its real market sold-out treatment.");
-    setStatus(roles, "The final stock update is arriving…", "Stock syncing");
-  });
-  schedule(timers, 5050, () => {
-    roles.productCard.classList.add("is-sold-out");
-    setStatus(roles, "The product is now clearly marked Sold Out.", "Stock updated live");
-  });
+  schedule(timers, 4200, finish);
 }
 
-function runLikesDemo(root, roles, timers) {
-  setAction(roles, "A visitor taps the heart", "This is a public interaction—no owner login or page reload is needed.");
-  setStatus(roles, "The real Khaya Kos like button is ready.");
+function resetLikes(root, roles) {
+  root.querySelectorAll(".khaya-heart").forEach((heart) => heart.remove());
+  roles.likeButton.classList.remove("is-liked");
+  roles.likeIcon.textContent = "♡";
+  roles.likeCount.textContent = "0";
+  setStatus(roles, "The Khaya Kos heart is ready for a visitor.");
+}
 
-  schedule(timers, 1700, () => {
+function playLikes(root, roles, timers) {
+  resetLikes(root, roles);
+  const firstLike = () => {
     roles.likeButton.classList.add("is-liked");
     roles.likeIcon.textContent = "❤";
     roles.likeCount.textContent = "1";
-    spawnLikeHearts(root, roles.likeButton);
-    setStatus(roles, "Five hearts rise from the button as the count becomes 1.", "Liked live");
-  });
-  schedule(timers, 4200, () => {
-    setAction(roles, "Someone else likes it", "Ambient hearts show visitors that another person is active on the site.");
+    spawnHearts(root, roles.likeButton, 5);
+    setStatus(roles, "Five hearts rise as the visitor’s like is counted.");
+  };
+  if (reducedMotion) {
+    firstLike();
     roles.likeCount.textContent = "2";
-    spawnLikeHearts(root, roles.likeButton, 3, true);
-    setStatus(roles, "Another live like arrives from a different visitor.", "2 live likes");
+    return;
+  }
+  schedule(timers, 1200, firstLike);
+  schedule(timers, 3600, () => {
+    roles.likeCount.textContent = "2";
+    spawnHearts(root, roles.likeButton, 3, true);
+    setStatus(roles, "A second live like arrives from another visitor.");
   });
 }
 
-function runMarketDemo(root, roles, timers) {
-  setAction(roles, "Tap “Market closed”", "The owner’s market toggle publishes today’s prepared stock.");
-  setStatus(roles, "Visitors currently see the regular weekly menu.");
+function resetMarket(root, roles) {
+  root.querySelectorAll(".demo-confetti").forEach((piece) => piece.remove());
+  roles.marketToggle.classList.remove("is-opening", "is-open");
+  roles.marketToggleTitle.textContent = "Market closed";
+  roles.marketToggleDetail.textContent = "Tap to open";
+  setHidden(roles.menuView, false);
+  setHidden(roles.marketView, true);
+  setStatus(roles, "Visitors are browsing the regular weekly menu.");
+}
 
-  schedule(timers, 1900, () => {
-    setAction(roles, "Market is now open", "Every connected visitor receives the live market state instantly.");
-    setStatus(roles, "The site is switching to today’s market view…", "Opening market");
-  });
-  schedule(timers, 2800, () => {
-    roles.menuView.hidden = true;
-    roles.marketView.hidden = false;
+function playMarket(root, roles, timers) {
+  resetMarket(root, roles);
+  const openMarket = () => {
+    roles.marketToggle.classList.remove("is-opening");
+    roles.marketToggle.classList.add("is-open");
+    roles.marketToggleTitle.textContent = "Market open";
+    roles.marketToggleDetail.textContent = "Live at Gazebo Valley";
+    setHidden(roles.menuView, true);
+    setHidden(roles.marketView, false);
     celebrateMarketOpen(root);
-    setStatus(roles, "The visitor is taken to live stock under the confetti.", "Open now · Gazebo Valley");
+    setStatus(roles, "Connected visitors enter the live market under the confetti.");
+  };
+  if (reducedMotion) {
+    openMarket();
+    return;
+  }
+  schedule(timers, 1200, () => {
+    roles.marketToggle.classList.add("is-opening");
+    setStatus(roles, "The owner taps “Market closed”.");
   });
+  schedule(timers, 2300, openMarket);
 }
 
-function showReducedMotionFinal(root, roles, demoName) {
-  if (demoName === "photo") swapProductPhoto(roles);
-  if (demoName === "product") {
-    roles.productPrice.textContent = "R20";
-    roles.productCard.classList.add("is-sold-out");
-  }
-  if (demoName === "likes") {
-    roles.likeButton.classList.add("is-liked");
-    roles.likeIcon.textContent = "❤";
-    roles.likeCount.textContent = "2";
-  }
-  if (demoName === "market") {
-    roles.menuView.hidden = true;
-    roles.marketView.hidden = false;
-  }
-  setStatus(roles, "Final customer-visible state shown.", "Customer view");
-}
-
-export function initialisePhoneDemo() {
-  const root = document.querySelector("[data-demo-showcase]");
-  if (!root) return;
-
-  const roles = collectRoles(root);
-  const tabs = [...root.querySelectorAll("[role='tab']")];
-  const panel = root.querySelector("[role='tabpanel']");
-  const progress = root.querySelector(".progress span");
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let activeDemo = "photo";
+function createChapterController(root) {
+  const roles = getRoles(root);
+  const demoName = root.dataset.demoChapter;
   let timers = [];
+  let hasPlayed = false;
 
   function clearTimers() {
     timers.forEach((timer) => window.clearTimeout(timer));
     timers = [];
   }
 
-  function play(demoName) {
+  function play() {
     clearTimers();
-    activeDemo = demoName;
-    resetVisitor(roles, root);
-
-    const copy = DEMOS[demoName];
-    roles.storyCount.textContent = copy.count;
-    roles.storyTitle.textContent = copy.title;
-    roles.storyText.textContent = copy.text;
-    restartProgress(progress, reducedMotion);
-
-    tabs.forEach((tab) => {
-      const selected = tab.dataset.demo === demoName;
-      tab.classList.toggle("is-active", selected);
-      tab.setAttribute("aria-selected", String(selected));
-      tab.tabIndex = selected ? 0 : -1;
-    });
-    panel.setAttribute("aria-labelledby", tabs.find((tab) => tab.dataset.demo === demoName).id);
-
-    if (reducedMotion) {
-      showReducedMotionFinal(root, roles, demoName);
-      return;
-    }
-
-    if (demoName === "photo") runPhotoDemo(root, roles, timers);
-    if (demoName === "product") runProductDemo(roles, timers);
-    if (demoName === "likes") runLikesDemo(root, roles, timers);
-    if (demoName === "market") runMarketDemo(root, roles, timers);
+    hasPlayed = true;
+    root.classList.add("is-in-view");
+    if (demoName === "photo") playPhoto(root, roles, timers);
+    if (demoName === "product") playProduct(root, roles, timers);
+    if (demoName === "likes") playLikes(root, roles, timers);
+    if (demoName === "market") playMarket(root, roles, timers);
   }
 
-  tabs.forEach((tab, tabIndex) => {
-    tab.addEventListener("click", () => play(tab.dataset.demo));
-    tab.addEventListener("keydown", (event) => {
-      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-      event.preventDefault();
-      let nextIndex = tabIndex;
-      if (event.key === "ArrowLeft") nextIndex = (tabIndex - 1 + tabs.length) % tabs.length;
-      if (event.key === "ArrowRight") nextIndex = (tabIndex + 1) % tabs.length;
-      if (event.key === "Home") nextIndex = 0;
-      if (event.key === "End") nextIndex = tabs.length - 1;
-      tabs[nextIndex].focus();
-      play(tabs[nextIndex].dataset.demo);
-    });
-  });
+  roles.replay.addEventListener("click", play);
+  return { play, get hasPlayed() { return hasPlayed; } };
+}
 
-  roles.replay.addEventListener("click", () => play(activeDemo));
-  root.style.setProperty("--demo-duration", `${DEMO_DURATION}ms`);
-  play(activeDemo);
+export function initialisePhoneDemo() {
+  const chapters = [...document.querySelectorAll("[data-demo-chapter]")];
+  if (!chapters.length) return;
+
+  const controllers = new Map(chapters.map((chapter) => [chapter, createChapterController(chapter)]));
+  if (reducedMotion || !("IntersectionObserver" in window)) {
+    controllers.forEach((controller) => controller.play());
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const controller = controllers.get(entry.target);
+      if (!entry.isIntersecting || controller.hasPlayed) return;
+      entry.target.classList.add("is-in-view");
+      window.setTimeout(() => controller.play(), 550);
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: .28, rootMargin: "0px 0px -8%" });
+
+  chapters.forEach((chapter) => observer.observe(chapter));
 }
