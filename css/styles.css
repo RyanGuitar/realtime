@@ -41,6 +41,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .brand-dot { color: #7aa800; }
 .nav-links { display: flex; align-items: center; gap: 32px; }
 .nav-links > a { color: #414a50; font-size: .92rem; font-weight: 600; text-decoration: none; }
+.nav-links > a.button { color: #fff; }
 .nav-links > a:hover { color: var(--ink); }
 .button {
   display: inline-flex;
