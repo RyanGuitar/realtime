@@ -7,7 +7,7 @@
   <meta name="description" content="Fast, modern websites for small businesses—with simple editing built in, so you can update prices, stock and photos yourself." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -36,41 +36,105 @@
           <p class="micro">Based in South Africa · Usually replies the same day</p>
         </div>
 
-        <div class="demo-side" aria-label="Animated demonstration of a live-editable website">
-          <div class="demo-grid">
+        <div class="demo-side" id="demoShowcase" aria-label="Interactive demonstrations from the Khaya Kos website">
+          <div class="demo-tabs" role="tablist" aria-label="Choose a website demonstration">
+            <button type="button" class="demo-tab is-active" role="tab" aria-selected="true" aria-controls="demo-panel" id="tab-photo" data-demo="photo">
+              <span>01</span> New photo
+            </button>
+            <button type="button" class="demo-tab" role="tab" aria-selected="false" aria-controls="demo-panel" id="tab-product" data-demo="product" tabindex="-1">
+              <span>02</span> Update product
+            </button>
+            <button type="button" class="demo-tab" role="tab" aria-selected="false" aria-controls="demo-panel" id="tab-likes" data-demo="likes" tabindex="-1">
+              <span>03</span> Live likes
+            </button>
+            <button type="button" class="demo-tab" role="tab" aria-selected="false" aria-controls="demo-panel" id="tab-market" data-demo="market" tabindex="-1">
+              <span>04</span> Open market
+            </button>
+          </div>
+
+          <div class="demo-grid" id="demo-panel" role="tabpanel" aria-labelledby="tab-photo">
             <div class="phone-wrap">
               <div class="phone-shadow"></div>
               <div class="phone">
                 <div class="island"></div>
                 <div class="phone-screen">
                   <div class="screen-bar"><span>9:41</span><span>5G&nbsp;&nbsp;●</span></div>
-                  <div class="screen-brand"><strong>Saturday Bakehouse</strong><span>Order online</span></div>
-                  <div class="food-photo" id="foodPhoto">
-                    <span class="sold-badge">SOLD OUT</span>
-                    <span class="photo-shine"></span>
-                  </div>
-                  <div class="screen-content">
-                    <div class="screen-kicker">Fresh from the oven</div>
-                    <div class="screen-title-row">
-                      <div class="screen-title">Cinnamon buns</div>
-                      <div class="screen-price" id="price">R45</div>
+                  <div class="kk-site" id="customerView">
+                    <div class="kk-nav">
+                      <strong>KHAYA <em>KOS</em></strong>
+                      <span>Saturday treats</span>
                     </div>
-                    <div class="stock-line"><span class="stock-dot" id="stockDot"></span><span id="stock">6 left today</span></div>
-                    <button class="add-button" id="addButton" type="button">ADD TO ORDER</button>
-                    <div class="screen-home"></div>
+                    <div class="kk-page-head">
+                      <span>Available all week</span>
+                      <strong id="phoneHeading">The Full Menu</strong>
+                    </div>
+                    <article class="kk-card" id="productCard">
+                      <div class="kk-photo kk-photo-muffin" id="productPhoto">
+                        <span class="kk-ribbon" id="productName">Cappuccino Muffins</span>
+                        <span class="kk-sold-stamp" id="soldStamp">SOLD<br>OUT</span>
+                      </div>
+                      <div class="kk-card-body">
+                        <p id="productDescription">Soft coffee muffins with a sweet café-style finish.</p>
+                        <div class="kk-card-footer">
+                          <strong class="kk-price" id="productPrice">R35</strong>
+                          <button type="button" class="kk-like" id="likeButton" aria-label="Like Cappuccino Muffins" tabindex="-1">
+                            <span id="likeIcon">♡</span><b id="likeCount">12</b>
+                          </button>
+                        </div>
+                      </div>
+                    </article>
+                    <div class="kk-market-view" id="marketView" hidden>
+                      <div class="kk-live-banner"><i></i><strong>Open now</strong><span>at Gazebo Valley</span></div>
+                      <div class="kk-market-title">Live at the Market</div>
+                      <div class="kk-market-grid">
+                        <div><span class="mini-pie"></span><strong>Pies</strong><small>4 left</small></div>
+                        <div><span class="mini-muffin"></span><strong>Muffins</strong><small>7 left</small></div>
+                      </div>
+                    </div>
                   </div>
+
+                  <div class="owner-view" id="ownerView" hidden>
+                    <div class="owner-head"><span>KHAYA KOS</span><strong>Owner edit</strong></div>
+                    <div class="owner-card">
+                      <div class="owner-photo kk-photo kk-photo-muffin" id="ownerPhoto">
+                        <span class="owner-change-photo" id="changePhotoControl"><i></i> Change photo</span>
+                      </div>
+                      <label>Product name<input id="ownerProductName" value="Cappuccino Muffins" readonly></label>
+                      <div class="owner-fields">
+                        <label>Price<input id="ownerPrice" value="35" readonly></label>
+                        <label>Stock<input id="ownerStock" value="6" readonly></label>
+                      </div>
+                    </div>
+                    <button class="market-switch" id="marketSwitch" type="button" tabindex="-1">
+                      <span><i></i><b id="marketState">Market closed</b></span>
+                      <small id="marketAction">Tap to open</small>
+                    </button>
+                  </div>
+
+                  <div class="crop-view" id="cropView" hidden>
+                    <span class="crop-eyebrow">Owner photo editor</span>
+                    <strong>Frame your product photo</strong>
+                    <p>Keep the product inside the square.</p>
+                    <div class="crop-stage"><div class="kk-photo kk-photo-cake"></div></div>
+                    <div class="crop-zoom"><button tabindex="-1">−</button><span><i></i></span><button tabindex="-1">+</button></div>
+                    <button class="crop-use" id="cropUseButton" tabindex="-1">Use this photo</button>
+                  </div>
+
+                  <div class="screen-home"></div>
                 </div>
               </div>
-              <div class="live-pill" id="livePill">Updated live</div>
+              <div class="live-pill" id="livePill">Owner is editing</div>
             </div>
 
             <div class="story-card" aria-live="polite">
-              <div class="story-count" id="storyCount">01 / 04 · OWNER EDIT</div>
-              <h2 id="storyTitle">Change a price in seconds.</h2>
-              <p id="storyText">Open your simple editor from any device and type the new price. No developer, ticket or delay.</p>
+              <div class="story-count" id="storyCount">DEMO 01 · NEW PHOTO</div>
+              <h2 id="storyTitle">A fresh photo, live in seconds.</h2>
+              <p id="storyText">The owner chooses a photo, frames it neatly, and publishes it without sending anything to a developer.</p>
+              <div class="demo-status"><span id="demoStatusDot"></span><b id="demoStatus">Opening the owner editor…</b></div>
               <div class="progress" aria-hidden="true">
-                <span class="active"></span><span></span><span></span><span></span>
+                <span class="active"></span>
               </div>
+              <button type="button" class="replay-button" id="replayDemo">↻ Replay demo</button>
             </div>
           </div>
         </div>

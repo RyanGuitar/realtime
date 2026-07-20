@@ -3,38 +3,25 @@ export const CONTACT = Object.freeze({
   whatsappMessage: "Hi Ryan, I'd like to talk about a website for my business.",
 });
 
-export const DEMO_STORIES = Object.freeze([
-  {
-    count: "01 / 04 · OWNER EDIT",
-    title: "Change a price in seconds.",
-    text: "Open your simple editor from any device and type the new price. No developer, ticket or delay.",
-    price: "R45",
-    stock: "6 left today",
-    sold: false,
+export const DEMOS = Object.freeze({
+  photo: {
+    count: "DEMO 01 · NEW PHOTO",
+    title: "A fresh photo, live in seconds.",
+    text: "The owner chooses a photo, frames it neatly, and publishes it without sending anything to a developer.",
   },
-  {
-    count: "02 / 04 · LIVE UPDATE",
-    title: "Your website updates instantly.",
-    text: "The new R50 price appears for every customer as soon as you save it.",
-    price: "R50",
-    stock: "6 left today",
-    sold: false,
-    flash: true,
+  product: {
+    count: "DEMO 02 · PRODUCT UPDATE",
+    title: "Prices and stock stay honest.",
+    text: "A price update appears immediately. When the last item sells, customers see a clear sold-out message—not stale information.",
   },
-  {
-    count: "03 / 04 · STOCK CONTROL",
-    title: "Keep availability honest.",
-    text: "Running low? Change the stock count before the next customer places an order.",
-    price: "R50",
-    stock: "2 left today",
-    sold: false,
+  likes: {
+    count: "DEMO 03 · LIVE LIKES",
+    title: "Customers make the site feel alive.",
+    text: "Every heart updates the total in real time. Other visitors can even see ambient hearts when someone else likes a product.",
   },
-  {
-    count: "04 / 04 · SOLD OUT",
-    title: "One tap when it is gone.",
-    text: "Mark an item sold out immediately. Customers see the right information and you avoid awkward messages.",
-    price: "R50",
-    stock: "Sold out for today",
-    sold: true,
+  market: {
+    count: "DEMO 04 · OPEN THE MARKET",
+    title: "One tap opens market day.",
+    text: "The owner opens the Saturday market, live stock appears for customers, and Khaya Kos celebrates with its signature confetti.",
   },
-]);
+});
