@@ -29,12 +29,12 @@ function replaceList(list, items) {
   }));
 }
 
-function spawnHearts(root, button, count = 5, ambient = false) {
+function spawnHearts(root, anchor, count = 5) {
   if (reducedMotion) return;
   const rootRect = root.getBoundingClientRect();
-  const buttonRect = button.getBoundingClientRect();
-  const startX = ambient ? rootRect.width * 0.72 : buttonRect.left - rootRect.left + buttonRect.width / 2;
-  const startY = ambient ? rootRect.height * 0.68 : buttonRect.top - rootRect.top + 4;
+  const anchorRect = anchor.getBoundingClientRect();
+  const startX = anchorRect.left - rootRect.left + anchorRect.width / 2;
+  const startY = anchorRect.top - rootRect.top + 4;
 
   for (let index = 0; index < count; index += 1) {
     const heart = document.createElement("span");
@@ -323,32 +323,67 @@ function playProduct(root, roles, timers) {
 
 function resetLikes(root, roles) {
   root.querySelectorAll(".khaya-heart").forEach((heart) => heart.remove());
-  roles.likeButton.classList.remove("is-liked");
-  roles.likeIcon.textContent = "♡";
-  roles.likeCount.textContent = "0";
+  roles.primaryLikeButton.classList.remove("is-liked");
+  roles.primaryLikeIcon.textContent = "♡";
+  roles.primaryLikeCount.textContent = "0";
+  roles.secondaryLikeButton.classList.remove("is-liked", "is-receiving");
+  roles.secondaryLikeIcon.textContent = "♡";
+  roles.secondaryLikeCount.textContent = "0";
+  roles.likesBeam.classList.remove("is-sending");
+  roles.primaryLikeLabel.textContent = "Visitor taps Like";
+  roles.primaryLikeLabel.classList.remove("is-updated");
+  roles.secondaryLikeLabel.textContent = "Another visitor";
+  roles.secondaryLikeLabel.classList.remove("is-updated");
   setStatus(roles, "The Khaya Kos heart is ready for a visitor.");
+}
+
+function pulseLikeBeam(roles, label) {
+  roles.likesBeam.classList.remove("is-sending");
+  void roles.likesBeam.offsetWidth;
+  roles.likesBeam.classList.add("is-sending");
+  roles.secondaryLikeButton.classList.remove("is-receiving");
+  void roles.secondaryLikeButton.offsetWidth;
+  roles.secondaryLikeButton.classList.add("is-receiving");
+  roles.secondaryLikeLabel.textContent = label;
+  roles.secondaryLikeLabel.classList.add("is-updated");
 }
 
 function playLikes(root, roles, timers) {
   resetLikes(root, roles);
+
   const firstLike = () => {
-    roles.likeButton.classList.add("is-liked");
-    roles.likeIcon.textContent = "❤";
-    roles.likeCount.textContent = "1";
-    spawnHearts(root, roles.likeButton, 5);
+    roles.primaryLikeButton.classList.add("is-liked");
+    roles.primaryLikeIcon.textContent = "❤";
+    roles.primaryLikeCount.textContent = "1";
+    roles.primaryLikeLabel.textContent = "Like sent";
+    roles.primaryLikeLabel.classList.add("is-updated");
+    spawnHearts(root, roles.primaryLikeButton, 5);
     setStatus(roles, "Five hearts rise as the visitor’s like is counted.");
   };
+  const receiveFirstLike = () => {
+    roles.secondaryLikeCount.textContent = "1";
+    pulseLikeBeam(roles, "1 like · updated live");
+    spawnHearts(root, roles.remoteHeartOrigin, 3);
+    setStatus(roles, "The like count updates instantly for another visitor.");
+  };
+  const secondLike = () => {
+    roles.secondaryLikeIcon.textContent = "❤";
+    roles.secondaryLikeCount.textContent = "2";
+    pulseLikeBeam(roles, "2 likes · updated live");
+    spawnHearts(root, roles.remoteHeartOrigin, 3);
+    setStatus(roles, "A second live like arrives from another visitor.");
+  };
+
   if (reducedMotion) {
     firstLike();
-    roles.likeCount.textContent = "2";
+    receiveFirstLike();
+    secondLike();
     return;
   }
+
   schedule(timers, 1200, firstLike);
-  schedule(timers, 3600, () => {
-    roles.likeCount.textContent = "2";
-    spawnHearts(root, roles.likeButton, 3, true);
-    setStatus(roles, "A second live like arrives from another visitor.");
-  });
+  schedule(timers, 2350, receiveFirstLike);
+  schedule(timers, 4600, secondLike);
 }
 
 function resetMarket(root, roles) {

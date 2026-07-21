@@ -211,19 +211,27 @@
         <div class="wrap chapter-grid">
           <div class="chapter-copy">
             <span class="chapter-number">03 · LIVE LIKES</span>
-            <h2>A tiny interaction that makes the site feel alive.</h2>
-            <p>A customer taps the real Khaya Kos heart. Five hearts float up, the count changes, and another visitor’s like can arrive live.</p>
+            <h2>One tap. Every visitor sees the love.</h2>
+            <p>One customer likes the Doughnuts. The heart responds instantly on their phone, while the new count and a live heart burst appear for another visitor.</p>
             <div class="chapter-status" aria-live="polite"><i></i><span data-role="status">Waiting for this demo to enter view…</span></div>
             <button class="replay-button" type="button" data-role="replay">↻ Replay this demo</button>
           </div>
-          <div class="chapter-visual single-phone-visual">
-            <div class="phone-stage">
+          <div class="chapter-visual dual-phone-visual likes-dual-visual">
+            <div class="phone-stage likes-phone-stage likes-primary-stage">
               <div class="phone-shadow"></div>
-              <div class="phone chapter-phone"><div class="island"></div><div class="phone-screen"><div class="screen-bar"><span>9:41</span><span>5G&nbsp;&nbsp;●</span></div>
-                <div class="khaya-visitor"><header class="khaya-nav"><span class="khaya-home"><img src="assets/khaya/favicon.svg" alt=""></span><span class="khaya-brand"><strong>Khaya Kos</strong><small>Gazebo Valley</small></span><span class="khaya-menu" aria-hidden="true"><i></i><i></i><i></i></span></header><section class="khaya-menu-view"><div class="khaya-heading"><span>Available to order all week</span><strong>The Full Menu</strong><p>Tap the heart to like it.</p></div><article class="khaya-card"><div class="khaya-card-photo"><img src="assets/khaya/carrot-cake-muffins.svg" alt="Carrot Cake Muffins"><h3>Carrot Cake Muffins</h3></div><div class="khaya-card-body"><ul><li>Cream cheese icing, toasted walnut</li><li>Made with fresh farm carrots</li></ul><div class="khaya-card-footer"><span class="khaya-price">R20</span><button class="khaya-like" type="button" data-role="like-button" tabindex="-1"><span data-role="like-icon">♡</span><b data-role="like-count">0</b></button></div></div></article></section></div><div class="screen-home"></div>
+              <div class="phone chapter-phone"><div class="phone-screen">
+                <div class="likes-visitor-mobile"><header class="khaya-nav"><span class="khaya-home"><img src="assets/khaya/favicon.svg" alt=""></span><span class="khaya-brand"><strong>Khaya Kos</strong><small>Gazebo Valley</small></span><span class="khaya-menu" aria-hidden="true"><i></i><i></i><i></i></span></header><section class="khaya-menu-view likes-menu-view"><div class="khaya-heading likes-heading"><strong>The Full Menu</strong><p>See something you love? Tap the heart to like it. Likes update live for everyone.</p></div><article class="khaya-card likes-product-card"><div class="khaya-card-photo likes-product-photo"><img src="assets/khaya/doughnuts-screen.png" alt="Freshly baked doughnuts"><h3>Doughnuts</h3></div><div class="khaya-card-body likes-product-body"><ul><li>A selection of delicious, freshly baked doughnuts</li></ul><div class="khaya-card-footer"><span class="khaya-price">R10</span><button class="khaya-like" type="button" data-role="primary-like-button" tabindex="-1" aria-label="Like Doughnuts"><span data-role="primary-like-icon">♡</span><b data-role="primary-like-count">0</b></button></div></div></article></section></div>
               </div></div>
-              <span class="phone-label phone-label-live">Visitor’s phone</span>
+              <span class="phone-label phone-label-live" data-role="primary-like-label">Visitor taps Like</span>
             </div>
+            <div class="phone-stage likes-phone-stage likes-secondary-stage">
+              <div class="phone-shadow"></div>
+              <div class="phone chapter-phone"><div class="phone-screen">
+                <div class="likes-visitor-mobile"><header class="khaya-nav"><span class="khaya-home"><img src="assets/khaya/favicon.svg" alt=""></span><span class="khaya-brand"><strong>Khaya Kos</strong><small>Gazebo Valley</small></span><span class="khaya-menu" aria-hidden="true"><i></i><i></i><i></i></span></header><section class="khaya-menu-view likes-menu-view"><div class="khaya-heading likes-heading"><strong>The Full Menu</strong><p>See something you love? Tap the heart to like it. Likes update live for everyone.</p></div><article class="khaya-card likes-product-card"><div class="khaya-card-photo likes-product-photo"><img src="assets/khaya/doughnuts-screen.png" alt="Freshly baked doughnuts"><h3>Doughnuts</h3></div><div class="khaya-card-body likes-product-body"><ul><li>A selection of delicious, freshly baked doughnuts</li></ul><div class="khaya-card-footer"><span class="khaya-price">R10</span><span class="khaya-like" data-role="secondary-like-button"><span data-role="secondary-like-icon">♡</span><b data-role="secondary-like-count">0</b></span></div></div></article><span class="likes-heart-origin" data-role="remote-heart-origin" aria-hidden="true"></span></section></div>
+              </div></div>
+              <span class="phone-label phone-label-live" data-role="secondary-like-label">Another visitor</span>
+            </div>
+            <span class="realtime-beam likes-realtime-beam" data-role="likes-beam" aria-hidden="true">Like sent live →</span>
           </div>
         </div>
       </article>
