@@ -78,6 +78,8 @@ function resetPhoto(root, roles) {
   roles.cropImage.classList.remove("is-positioned");
   setHidden(roles.photoSheet, true);
   setHidden(roles.cropModal, true);
+  setHidden(roles.ownerMobile, false);
+  setHidden(roles.ownerFinishedView, true);
   setHidden(roles.ownerImage, true);
   setHidden(roles.ownerPlaceholder, false);
   roles.ownerPriceField.value = "0";
@@ -94,7 +96,18 @@ function resetPhoto(root, roles) {
   roles.visitorCard.classList.remove("is-live-updated", "is-receiving", "has-photo", "has-name", "has-price", "has-description");
   roles.visitorLabel.textContent = "Visitor’s phone";
   roles.visitorLabel.classList.remove("is-updated");
+  roles.ownerLabel.textContent = "Owner edit mode";
+  roles.ownerLabel.classList.remove("is-updated");
   setStatus(roles, "A blank New Item card is ready in owner edit mode.");
+}
+
+function pulseRealtime(roles, label) {
+  roles.realtimeBeam.classList.remove("is-sending");
+  void roles.realtimeBeam.offsetWidth;
+  roles.realtimeBeam.classList.add("is-sending");
+  roles.visitorCard.classList.add("is-receiving");
+  roles.visitorLabel.textContent = label;
+  roles.visitorLabel.classList.add("is-updated");
 }
 
 function typeField(timers, field, text, startAt, duration) {
@@ -123,8 +136,12 @@ function finishPhoto(root, roles) {
   roles.visitorPrice.textContent = "R200";
   roles.visitorDescription.textContent = "Rich, moist chocolate cake layered with silky chocolate icing.";
   roles.visitorCard.classList.add("has-photo", "has-name", "has-price", "has-description", "is-live-updated");
-  roles.visitorLabel.textContent = "Added live";
+  roles.visitorLabel.textContent = "Complete and live";
   roles.visitorLabel.classList.add("is-updated");
+  setHidden(roles.ownerMobile, true);
+  setHidden(roles.ownerFinishedView, false);
+  roles.ownerLabel.textContent = "Visitor view";
+  roles.ownerLabel.classList.add("is-updated");
   root.classList.add("is-complete");
   setStatus(roles, "The complete Moist Chocolate Cake listing is now live.");
 }
@@ -165,46 +182,51 @@ function playPhoto(root, roles, timers) {
     setHidden(roles.cropModal, true);
     setHidden(roles.ownerImage, false);
     setHidden(roles.ownerPlaceholder, true);
-    setStatus(roles, "The cropped photo fills the new product card.");
-  });
-
-  typeField(timers, roles.ownerPriceField, "200", 7350, 650);
-  schedule(timers, 7350, () => setStatus(roles, "Price: R200."));
-  typeField(timers, roles.ownerNameField, "Moist Chocolate Cake", 8350, 1500);
-  schedule(timers, 8350, () => setStatus(roles, "The product is named Moist Chocolate Cake."));
-  typeField(timers, roles.ownerDescriptionField, "Rich, moist chocolate cake layered with silky chocolate icing.", 10150, 2200);
-  schedule(timers, 10150, () => setStatus(roles, "A short description completes the listing."));
-
-  schedule(timers, 12800, () => {
-    roles.exitEdit.classList.add("is-tapped");
-    roles.visitorCard.classList.add("is-receiving");
-    roles.realtimeBeam.classList.add("is-sending");
-    roles.visitorLabel.textContent = "Receiving update";
-    setStatus(roles, "The owner exits edit mode. The visitor receives the new item.");
-  });
-  schedule(timers, 13700, () => {
     setHidden(roles.visitorPlaceholder, true);
     setHidden(roles.visitorImage, false);
     roles.visitorCard.classList.add("has-photo");
-    setStatus(roles, "First, the cropped chocolate cake photo loads.");
+    pulseRealtime(roles, "Photo updated live");
+    setStatus(roles, "The exact cropped photo immediately appears for the visitor.");
   });
-  schedule(timers, 14550, () => {
-    roles.visitorName.textContent = "Moist Chocolate Cake";
-    roles.visitorCard.classList.add("has-name");
-    setStatus(roles, "Then the product name appears.");
-  });
-  schedule(timers, 15350, () => {
+
+  typeField(timers, roles.ownerPriceField, "200", 7350, 650);
+  schedule(timers, 7350, () => setStatus(roles, "The owner enters the R200 price."));
+  schedule(timers, 8150, () => {
     roles.visitorPrice.textContent = "R200";
     roles.visitorCard.classList.add("has-price");
-    setStatus(roles, "The R200 price follows.");
+    pulseRealtime(roles, "Price updated live");
+    setStatus(roles, "Moving to the next field publishes R200 for the visitor.");
   });
-  schedule(timers, 16150, () => {
+  typeField(timers, roles.ownerNameField, "Moist Chocolate Cake", 8350, 1500);
+  schedule(timers, 8350, () => setStatus(roles, "The owner types the product name."));
+  schedule(timers, 10000, () => {
+    roles.visitorName.textContent = "Moist Chocolate Cake";
+    roles.visitorCard.classList.add("has-name");
+    pulseRealtime(roles, "Name updated live");
+    setStatus(roles, "Leaving the name field publishes Moist Chocolate Cake.");
+  });
+  typeField(timers, roles.ownerDescriptionField, "Rich, moist chocolate cake layered with silky chocolate icing.", 10150, 2200);
+  schedule(timers, 10150, () => setStatus(roles, "The owner adds a short description."));
+  schedule(timers, 12500, () => {
     roles.visitorDescription.textContent = "Rich, moist chocolate cake layered with silky chocolate icing.";
     roles.visitorCard.classList.add("has-description", "is-live-updated");
-    roles.visitorLabel.textContent = "Added live";
+    pulseRealtime(roles, "Description updated live");
+    setStatus(roles, "The finished description appears on the visitor’s phone.");
+  });
+
+  schedule(timers, 13600, () => {
+    roles.exitEdit.classList.add("is-tapped");
+    setStatus(roles, "Every edit is already live. The owner now exits edit mode.");
+  });
+  schedule(timers, 14350, () => {
+    setHidden(roles.ownerMobile, true);
+    setHidden(roles.ownerFinishedView, false);
+    roles.ownerLabel.textContent = "Visitor view";
+    roles.ownerLabel.classList.add("is-updated");
+    roles.visitorLabel.textContent = "Complete and live";
     roles.visitorLabel.classList.add("is-updated");
     root.classList.add("is-complete");
-    setStatus(roles, "The complete Moist Chocolate Cake listing is now live.");
+    setStatus(roles, "Both phones now show the same finished customer view.");
   });
 }
 

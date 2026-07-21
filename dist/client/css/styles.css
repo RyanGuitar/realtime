@@ -952,6 +952,11 @@ footer { padding: 34px 0 45px; border-top: 1px solid var(--line); }
 .demo-chapter-photo .chapter-visual { min-height: 700px; }
 .demo-chapter-photo .owner-stage { height: 676px; }
 .demo-chapter-photo .owner-stage .chapter-phone { height: 650px; }
+.demo-chapter-photo .island,
+.demo-chapter-photo .screen-bar,
+.demo-chapter-photo .screen-home { display: none; }
+.demo-chapter-photo .owner-mobile,
+.demo-chapter-photo .khaya-visitor { height: 100%; }
 .visitor-stage { position: absolute; z-index: 8; right: -8px; bottom: -5px; transform: scale(.8) rotate(4deg); transform-origin: bottom right; }
 .visitor-stage .chapter-phone { box-shadow: inset 0 0 0 2px #090c0c, 0 42px 80px rgba(14,22,19,.32); }
 .realtime-beam { position: absolute; z-index: 12; left: 260px; top: 300px; opacity: 0; padding: 7px 11px; border-radius: 999px; color: #3e5d08; background: var(--lime); font-size: .69rem; font-weight: 800; transform: translateX(-12px); }
@@ -965,18 +970,24 @@ footer { padding: 34px 0 45px; border-top: 1px solid var(--line); }
 .owner-mobile-nav button { min-height: 34px; padding: 0 10px; border: 0; border-radius: 12px; color: #fff; background: #173f61; font: 800 .56rem "Nunito", sans-serif; }
 .owner-mobile-nav button.is-tapped { animation: exitEditTap .65s ease; }
 @keyframes exitEditTap { 50% { transform: scale(.92); background: #0a6258; } }
-.owner-mobile-content { height: calc(100% - 54px); overflow: hidden; padding: 10px 9px 22px; }
+.owner-edit-banner { display: grid; min-height: 31px; grid-template-columns: 7px auto 1fr; align-items: center; gap: 6px; padding: 5px 10px; color: #124d48; border-bottom: 1px solid #bcdcd7; background: #e4f3ef; font-size: .46rem; }
+.owner-edit-banner i { width: 7px; height: 7px; border-radius: 50%; background: #078e78; box-shadow: 0 0 0 4px rgba(7,142,120,.13); }
+.owner-edit-banner strong { font-weight: 800; }
+.owner-edit-banner span { color: #60807b; text-align: right; }
+.owner-mobile-content { height: calc(100% - 85px); overflow: hidden; padding: 10px 9px 22px; }
 .owner-product-card { position: relative; overflow: hidden; padding: 0 9px 11px; border: 2px solid #00796f; border-radius: 15px; background: #fff; box-shadow: 0 8px 18px rgba(35,54,70,.1); }
 .owner-new-ribbon { position: absolute; z-index: 8; top: 0; left: 0; padding: 9px 13px; border-radius: 0 0 11px 0; color: #fff; background: #173f61; font: 800 .72rem "Baloo 2", sans-serif; }
 .owner-delete { position: absolute; z-index: 9; top: 9px; right: 9px; display: grid; width: 35px; height: 35px; place-items: center; border: 2px solid #fff; border-radius: 50%; color: #fff; background: #c6382e; font: 400 1.25rem/1 var(--sans); }
-.owner-product-photo { position: relative; height: 320px; margin: 0 -9px; overflow: hidden; background: #d1a970; }
-.owner-product-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; animation: ownerPhotoIn .65s ease both; }
+.owner-product-photo { position: relative; height: auto; aspect-ratio: 1; margin: 0 -9px; overflow: hidden; background: #d1a970; }
+.owner-product-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 32%; animation: ownerPhotoIn .65s ease both; }
 @keyframes ownerPhotoIn { from { opacity: 0; transform: scale(1.08); } }
 .owner-photo-placeholder { position: absolute; inset: 0; display: grid; align-content: center; justify-items: center; gap: 7px; color: #352f29; background: linear-gradient(180deg,#d1a970 0 58%,#283b4b 100%); }
 .owner-photo-placeholder span { display: grid; width: 92px; height: 92px; place-items: center; border-radius: 50%; background: rgba(255,255,255,.18); font-size: 2.6rem; }
 .owner-photo-placeholder strong { font: 800 1.04rem "Baloo 2", sans-serif; }
-.owner-product-photo > button { position: absolute; z-index: 7; inset: auto 0 0; display: flex; min-height: 62px; align-items: center; justify-content: center; gap: 7px; border: 0; color: #fff; background: linear-gradient(transparent,rgba(13,35,51,.88)); font: 800 .68rem "Nunito", sans-serif; }
-.owner-product-photo button span { font-size: 1rem; }
+.owner-product-photo > button { position: absolute; z-index: 7; inset: 0; display: grid; place-items: center; border: 0; color: #fff; background: transparent; }
+.owner-product-photo button span { position: relative; display: block; width: 38px; height: 30px; border: 3px solid #fff; border-radius: 6px; background: rgba(10,31,45,.36); box-shadow: 0 4px 14px rgba(0,0,0,.28); font-size: 0; }
+.owner-product-photo button span::before { content: ""; position: absolute; width: 11px; height: 11px; left: 50%; top: 50%; border: 3px solid #fff; border-radius: 50%; transform: translate(-50%,-50%); }
+.owner-product-photo button span::after { content: ""; position: absolute; width: 13px; height: 6px; left: 4px; top: -7px; border-radius: 3px 3px 0 0; background: #fff; }
 .owner-product-photo button.is-tapped { animation: ownerPhotoTap .6s ease; }
 @keyframes ownerPhotoTap { 50% { background: rgba(90,124,34,.82); transform: scale(.97); } }
 .owner-product-card label { display: grid; gap: 3px; margin-top: 7px; color: #667078; font-size: .46rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
@@ -1002,7 +1013,7 @@ footer { padding: 34px 0 45px; border-top: 1px solid var(--line); }
 .photo-crop-modal > p { margin: 4px 0 8px; color: #586170; font-size: .5rem; line-height: 1.35; }
 .crop-canvas { position: relative; width: 100%; aspect-ratio: 1; overflow: hidden; border: 3px solid #17334e; border-radius: 10px; }
 .crop-canvas img { width: 100%; height: 100%; object-fit: cover; object-position: center 55%; transform: scale(.88) translateY(7px); transition: transform 1.25s cubic-bezier(.2,.75,.2,1), object-position 1.25s ease; }
-.crop-canvas img.is-positioned { object-position: center 32%; transform: scale(1.22) translateY(-2px); }
+.crop-canvas img.is-positioned { object-position: center 32%; transform: none; }
 .crop-canvas span { position: absolute; inset: 0; background: linear-gradient(90deg,transparent 33%,rgba(255,255,255,.65) 33.4%,transparent 34%,transparent 66%,rgba(255,255,255,.65) 66.4%,transparent 67%),linear-gradient(transparent 33%,rgba(255,255,255,.65) 33.4%,transparent 34%,transparent 66%,rgba(255,255,255,.65) 66.4%,transparent 67%); }
 .crop-zoom-label { display: block; margin-top: 7px; color: #17334e; font-size: .54rem; text-align: center; }
 .crop-controls { display: grid; grid-template-columns: 30px 1fr 30px; gap: 7px; align-items: center; margin-top: 4px; }
@@ -1019,6 +1030,7 @@ footer { padding: 34px 0 45px; border-top: 1px solid var(--line); }
 @keyframes usePhotoTap { 50% { transform: scale(.93); background: #2f5b2c; } }
 .khaya-card.is-live-updated { animation: liveCardUpdate .8s ease; }
 @keyframes liveCardUpdate { 40% { transform: scale(1.02); box-shadow: 0 0 0 8px rgba(201,245,92,.65); } }
+.demo-chapter-photo .live-new-item .khaya-card-photo { height: auto; aspect-ratio: 1; }
 .live-new-item .khaya-card-photo img { opacity: 0; transform: scale(1.08); object-position: center 32%; transition: opacity .55s ease, transform .9s ease; }
 .live-new-item.has-photo .khaya-card-photo img { opacity: 1; transform: none; }
 .visitor-photo-placeholder { position: absolute; z-index: 2; inset: 0; display: grid; place-content: center; justify-items: center; gap: 9px; color: #567080; background: #dfe8ed; font-size: .54rem; font-weight: 800; }
@@ -1032,6 +1044,8 @@ footer { padding: 34px 0 45px; border-top: 1px solid var(--line); }
 .live-new-item.has-price .visitor-live-price { opacity: 1; animation: khayaPriceUpdate .6s ease; }
 .live-new-item.is-receiving { box-shadow: 0 0 0 6px rgba(201,245,92,.35), 0 8px 18px rgba(35,54,70,.12); }
 @keyframes visitorFieldIn { from { opacity: .2; transform: translateY(8px); } }
+.owner-finished-view { animation: ownerToVisitor .65s ease both; }
+@keyframes ownerToVisitor { from { opacity: 0; transform: scale(.96); } }
 
 .owner-control-card { position: absolute; z-index: 12; left: 10px; top: 150px; width: 190px; padding: 14px; border: 1px solid #d7dee2; border-radius: 15px; background: rgba(255,255,255,.96); box-shadow: 0 18px 42px rgba(24,41,53,.18); transform: rotate(-3deg); }
 .owner-control-card > span { color: #3f754c; font-size: .51rem; font-weight: 800; letter-spacing: .1em; }

@@ -76,12 +76,13 @@
                 <div class="island"></div>
                 <div class="phone-screen">
                   <div class="screen-bar"><span>9:41</span><span>5G&nbsp;&nbsp;●</span></div>
-                  <div class="owner-mobile">
+                  <div class="owner-mobile" data-role="owner-mobile">
                     <header class="owner-mobile-nav">
                       <img src="assets/khaya/favicon.svg" alt="">
                       <strong>Owner edit mode</strong>
                       <button type="button" data-role="exit-edit" tabindex="-1">Exit edit mode</button>
                     </header>
+                    <div class="owner-edit-banner"><i></i><strong>Adding a new product</strong><span>Every finished edit publishes live</span></div>
                     <div class="owner-mobile-content">
                       <article class="owner-product-card">
                         <span class="owner-new-ribbon">New Item</span>
@@ -89,7 +90,7 @@
                         <div class="owner-product-photo">
                           <img data-role="owner-image" src="assets/khaya/moist-chocolate-cake.jpeg" alt="Moist Chocolate Cake" hidden>
                           <div class="owner-photo-placeholder" data-role="owner-placeholder"><span>📷</span><strong>Add a photo</strong></div>
-                          <button type="button" data-role="change-photo" tabindex="-1"><span>▣</span> Change photo</button>
+                          <button type="button" data-role="change-photo" tabindex="-1" aria-label="Add or change product photo"><span>📷</span></button>
                         </div>
                         <label>Price (rand)<input data-role="owner-price-field" value="0" readonly tabindex="-1"></label>
                         <label>Product name<input data-role="owner-name-field" value="New Item" readonly tabindex="-1"></label>
@@ -113,10 +114,14 @@
                       <div class="crop-actions"><button type="button" tabindex="-1">Cancel</button><button type="button" data-role="use-photo" tabindex="-1">Use this photo</button></div>
                     </div>
                   </div>
+                  <div class="khaya-visitor owner-finished-view" data-role="owner-finished-view" hidden>
+                    <header class="khaya-nav"><span class="khaya-home"><img src="assets/khaya/favicon.svg" alt=""></span><span class="khaya-brand"><strong>Khaya Kos</strong><small>Gazebo Valley</small></span><span class="khaya-menu" aria-hidden="true"><i></i><i></i><i></i></span></header>
+                    <section class="khaya-menu-view"><div class="khaya-heading"><span>Available to order all week</span><strong>The Full Menu</strong><p>Live updates appear here instantly.</p></div><article class="khaya-card live-new-item has-photo has-name has-price has-description"><div class="khaya-card-photo"><img src="assets/khaya/moist-chocolate-cake.jpeg" alt="Moist Chocolate Cake"><h3>Moist Chocolate Cake</h3></div><div class="khaya-card-body"><p class="visitor-live-description">Rich, moist chocolate cake layered with silky chocolate icing.</p><div class="khaya-card-footer"><span class="khaya-price visitor-live-price">R200</span><span class="khaya-like"><span>♡</span><b>0</b></span></div></div></article></section>
+                  </div>
                   <div class="screen-home"></div>
                 </div>
               </div>
-              <span class="phone-label">Owner’s phone</span>
+              <span class="phone-label" data-role="owner-label">Owner edit mode</span>
             </div>
 
             <div class="phone-stage visitor-stage">
@@ -128,7 +133,7 @@
                   <div class="khaya-visitor">
                     <header class="khaya-nav"><span class="khaya-home"><img src="assets/khaya/favicon.svg" alt=""></span><span class="khaya-brand"><strong>Khaya Kos</strong><small>Gazebo Valley</small></span><span class="khaya-menu" aria-hidden="true"><i></i><i></i><i></i></span></header>
                     <section class="khaya-menu-view">
-                      <div class="khaya-heading"><span>Available to order all week</span><strong>The Full Menu</strong><p>A new item is being added live.</p></div>
+                      <div class="khaya-heading"><span>Available to order all week</span><strong>The Full Menu</strong><p>Live updates appear here instantly.</p></div>
                       <article class="khaya-card live-new-item" data-role="visitor-card">
                         <div class="khaya-card-photo" data-role="visitor-photo">
                           <div class="visitor-photo-placeholder" data-role="visitor-placeholder"><i></i><span>New product loading…</span></div>
