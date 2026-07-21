@@ -70,45 +70,63 @@ function celebrateMarketOpen(root) {
 function resetPhoto(root, roles) {
   root.classList.remove("is-complete");
   roles.changePhoto.classList.remove("is-tapped");
-  roles.takePhoto.classList.remove("is-tapped");
-  roles.cameraFlash.classList.remove("is-flashing");
+  roles.choosePhoto.classList.remove("is-tapped");
   roles.usePhoto.classList.remove("is-tapped");
+  roles.exitEdit.classList.remove("is-tapped");
   roles.realtimeBeam.classList.remove("is-sending");
   roles.zoomLevel.classList.remove("is-zooming");
+  roles.cropImage.classList.remove("is-positioned");
   setHidden(roles.photoSheet, true);
   setHidden(roles.cropModal, true);
-  roles.ownerImage.src = "assets/khaya/cappuccino-muffins.svg";
-  roles.visitorImage.src = "assets/khaya/cappuccino-muffins.svg";
-  roles.visitorImage.alt = "Cappuccino Muffins";
-  roles.visitorName.textContent = "Cappuccino Muffins";
-  roles.visitorPhoto.classList.remove("is-purple");
-  roles.visitorCard.classList.remove("is-live-updated");
-  roles.visitorPrice.textContent = "R18";
-  replaceList(roles.visitorDescription, ["Coffee-swirled sponge, whipped topping", "Baked fresh to order"]);
+  setHidden(roles.ownerImage, true);
+  setHidden(roles.ownerPlaceholder, false);
+  roles.ownerPriceField.value = "0";
+  roles.ownerNameField.value = "New Item";
+  roles.ownerDescriptionField.value = "Add a short description here.";
+  roles.ownerPriceField.classList.remove("is-typing");
+  roles.ownerNameField.classList.remove("is-typing");
+  roles.ownerDescriptionField.classList.remove("is-typing");
+  setHidden(roles.visitorImage, true);
+  setHidden(roles.visitorPlaceholder, false);
+  roles.visitorName.textContent = "New Item";
+  roles.visitorDescription.textContent = "Product details will appear here.";
+  roles.visitorPrice.textContent = "R0";
+  roles.visitorCard.classList.remove("is-live-updated", "is-receiving", "has-photo", "has-name", "has-price", "has-description");
   roles.visitorLabel.textContent = "Visitor’s phone";
   roles.visitorLabel.classList.remove("is-updated");
-  setStatus(roles, "The owner is ready to change the product photo.");
+  setStatus(roles, "A blank New Item card is ready in owner edit mode.");
+}
+
+function typeField(timers, field, text, startAt, duration) {
+  const step = Math.max(35, duration / text.length);
+  schedule(timers, startAt, () => {
+    field.value = "";
+    field.classList.add("is-typing");
+  });
+  [...text].forEach((character, index) => {
+    schedule(timers, startAt + (index + 1) * step, () => {
+      field.value += character;
+    });
+  });
+  schedule(timers, startAt + duration + 120, () => field.classList.remove("is-typing"));
 }
 
 function finishPhoto(root, roles) {
-  setHidden(roles.cropModal, true);
-  roles.ownerImage.src = "assets/khaya/carrot-cake-muffins.svg";
-  roles.visitorImage.classList.add("is-swapping");
-  roles.realtimeBeam.classList.add("is-sending");
-  window.setTimeout(() => {
-    roles.visitorImage.src = "assets/khaya/carrot-cake-muffins.svg";
-    roles.visitorImage.alt = "Carrot Cake Muffins";
-    roles.visitorName.textContent = "Carrot Cake Muffins";
-    roles.visitorPhoto.classList.add("is-purple");
-    roles.visitorPrice.textContent = "R20";
-    replaceList(roles.visitorDescription, ["Cream cheese icing, toasted walnut", "Made with fresh farm carrots"]);
-    roles.visitorImage.classList.remove("is-swapping");
-    roles.visitorCard.classList.add("is-live-updated");
-    roles.visitorLabel.textContent = "Updated live";
-    roles.visitorLabel.classList.add("is-updated");
-    root.classList.add("is-complete");
-  }, reducedMotion ? 0 : 320);
-  setStatus(roles, "The new photo appears on the visitor’s phone in real time.");
+  setHidden(roles.ownerImage, false);
+  setHidden(roles.ownerPlaceholder, true);
+  roles.ownerPriceField.value = "200";
+  roles.ownerNameField.value = "Moist Chocolate Cake";
+  roles.ownerDescriptionField.value = "Rich, moist chocolate cake layered with silky chocolate icing.";
+  setHidden(roles.visitorPlaceholder, true);
+  setHidden(roles.visitorImage, false);
+  roles.visitorName.textContent = "Moist Chocolate Cake";
+  roles.visitorPrice.textContent = "R200";
+  roles.visitorDescription.textContent = "Rich, moist chocolate cake layered with silky chocolate icing.";
+  roles.visitorCard.classList.add("has-photo", "has-name", "has-price", "has-description", "is-live-updated");
+  roles.visitorLabel.textContent = "Added live";
+  roles.visitorLabel.classList.add("is-updated");
+  root.classList.add("is-complete");
+  setStatus(roles, "The complete Moist Chocolate Cake listing is now live.");
 }
 
 function playPhoto(root, roles, timers) {
@@ -117,33 +135,77 @@ function playPhoto(root, roles, timers) {
     finishPhoto(root, roles);
     return;
   }
-  schedule(timers, 900, () => {
+  schedule(timers, 800, () => {
     roles.changePhoto.classList.add("is-tapped");
-    setStatus(roles, "The owner taps “Change photo”.");
+    setStatus(roles, "The owner starts by adding the product photo.");
   });
-  schedule(timers, 1700, () => {
+  schedule(timers, 1450, () => {
     setHidden(roles.photoSheet, false);
-    setStatus(roles, "Take a new photo, or choose one from the phone’s library.");
+    setStatus(roles, "The phone offers the camera or photo library.");
   });
-  schedule(timers, 2700, () => {
-    roles.takePhoto.classList.add("is-tapped");
-    roles.cameraFlash.classList.add("is-flashing");
-    setStatus(roles, "The owner chooses “Take Photo” and captures the new product.");
+  schedule(timers, 2350, () => {
+    roles.choosePhoto.classList.add("is-tapped");
+    setStatus(roles, "Moist Chocolate Cake is selected from the photo library.");
   });
-  schedule(timers, 3500, () => {
+  schedule(timers, 3050, () => {
     setHidden(roles.photoSheet, true);
     setHidden(roles.cropModal, false);
-    setStatus(roles, "Khaya Kos opens its square crop tool.");
+    setStatus(roles, "The real Khaya Kos crop editor opens.");
   });
-  schedule(timers, 4800, () => {
+  schedule(timers, 4350, () => {
     roles.zoomLevel.classList.add("is-zooming");
-    setStatus(roles, "Drag to frame the product, then adjust the zoom.");
+    roles.cropImage.classList.add("is-positioned");
+    setStatus(roles, "The owner zooms and centres the cake inside the square.");
   });
-  schedule(timers, 6200, () => {
+  schedule(timers, 5850, () => {
     roles.usePhoto.classList.add("is-tapped");
     setStatus(roles, "The owner taps “Use this photo”.");
   });
-  schedule(timers, 6950, () => finishPhoto(root, roles));
+  schedule(timers, 6500, () => {
+    setHidden(roles.cropModal, true);
+    setHidden(roles.ownerImage, false);
+    setHidden(roles.ownerPlaceholder, true);
+    setStatus(roles, "The cropped photo fills the new product card.");
+  });
+
+  typeField(timers, roles.ownerPriceField, "200", 7350, 650);
+  schedule(timers, 7350, () => setStatus(roles, "Price: R200."));
+  typeField(timers, roles.ownerNameField, "Moist Chocolate Cake", 8350, 1500);
+  schedule(timers, 8350, () => setStatus(roles, "The product is named Moist Chocolate Cake."));
+  typeField(timers, roles.ownerDescriptionField, "Rich, moist chocolate cake layered with silky chocolate icing.", 10150, 2200);
+  schedule(timers, 10150, () => setStatus(roles, "A short description completes the listing."));
+
+  schedule(timers, 12800, () => {
+    roles.exitEdit.classList.add("is-tapped");
+    roles.visitorCard.classList.add("is-receiving");
+    roles.realtimeBeam.classList.add("is-sending");
+    roles.visitorLabel.textContent = "Receiving update";
+    setStatus(roles, "The owner exits edit mode. The visitor receives the new item.");
+  });
+  schedule(timers, 13700, () => {
+    setHidden(roles.visitorPlaceholder, true);
+    setHidden(roles.visitorImage, false);
+    roles.visitorCard.classList.add("has-photo");
+    setStatus(roles, "First, the cropped chocolate cake photo loads.");
+  });
+  schedule(timers, 14550, () => {
+    roles.visitorName.textContent = "Moist Chocolate Cake";
+    roles.visitorCard.classList.add("has-name");
+    setStatus(roles, "Then the product name appears.");
+  });
+  schedule(timers, 15350, () => {
+    roles.visitorPrice.textContent = "R200";
+    roles.visitorCard.classList.add("has-price");
+    setStatus(roles, "The R200 price follows.");
+  });
+  schedule(timers, 16150, () => {
+    roles.visitorDescription.textContent = "Rich, moist chocolate cake layered with silky chocolate icing.";
+    roles.visitorCard.classList.add("has-description", "is-live-updated");
+    roles.visitorLabel.textContent = "Added live";
+    roles.visitorLabel.classList.add("is-updated");
+    root.classList.add("is-complete");
+    setStatus(roles, "The complete Moist Chocolate Cake listing is now live.");
+  });
 }
 
 function resetProduct(root, roles) {

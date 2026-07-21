@@ -62,9 +62,9 @@
       <article class="demo-chapter demo-chapter-photo" data-demo-chapter="photo">
         <div class="wrap chapter-grid">
           <div class="chapter-copy">
-            <span class="chapter-number">01 · PHOTOS</span>
-            <h2>Take it. Crop it. Publish it.</h2>
-            <p>The owner can take a fresh product photo or choose one from the phone, frame it neatly, and use it immediately.</p>
+            <span class="chapter-number">01 · ADD A PRODUCT</span>
+            <h2>Add it once. Watch it appear.</h2>
+            <p>From a blank product card to a finished listing—photo, crop, name, description and price—all added by the owner from her phone.</p>
             <div class="chapter-status" aria-live="polite"><i></i><span data-role="status">Waiting for this demo to enter view…</span></div>
             <button class="replay-button" type="button" data-role="replay">↻ Replay this demo</button>
           </div>
@@ -77,30 +77,39 @@
                 <div class="phone-screen">
                   <div class="screen-bar"><span>9:41</span><span>5G&nbsp;&nbsp;●</span></div>
                   <div class="owner-mobile">
-                    <header class="owner-mobile-nav"><strong>Khaya Kos</strong><span>Owner edit mode</span></header>
+                    <header class="owner-mobile-nav">
+                      <img src="assets/khaya/favicon.svg" alt="">
+                      <strong>Owner edit mode</strong>
+                      <button type="button" data-role="exit-edit" tabindex="-1">Exit edit mode</button>
+                    </header>
                     <div class="owner-mobile-content">
-                      <h3>Live at the Market</h3>
                       <article class="owner-product-card">
+                        <span class="owner-new-ribbon">New Item</span>
+                        <button class="owner-delete" type="button" tabindex="-1" aria-label="Delete new item">×</button>
                         <div class="owner-product-photo">
-                          <img data-role="owner-image" src="assets/khaya/cappuccino-muffins.svg" alt="Cappuccino Muffins">
+                          <img data-role="owner-image" src="assets/khaya/moist-chocolate-cake.jpeg" alt="Moist Chocolate Cake" hidden>
+                          <div class="owner-photo-placeholder" data-role="owner-placeholder"><span>📷</span><strong>Add a photo</strong></div>
                           <button type="button" data-role="change-photo" tabindex="-1"><span>▣</span> Change photo</button>
                         </div>
-                        <label>Price (rand)<input value="18" readonly tabindex="-1"></label>
-                        <label>Product name<input value="Cappuccino Muffins" readonly tabindex="-1"></label>
+                        <label>Price (rand)<input data-role="owner-price-field" value="0" readonly tabindex="-1"></label>
+                        <label>Product name<input data-role="owner-name-field" value="New Item" readonly tabindex="-1"></label>
+                        <label>Description<textarea data-role="owner-description-field" readonly tabindex="-1">Add a short description here.</textarea></label>
                       </article>
                     </div>
                     <div class="photo-source-sheet" data-role="photo-sheet" hidden>
                       <strong>Add a product photo</strong>
-                      <button type="button" data-role="take-photo" tabindex="-1"><span>●</span> Take Photo</button>
-                      <button type="button" tabindex="-1"><span>▧</span> Choose from Photo Library</button>
+                      <button type="button" tabindex="-1"><span>●</span> Take Photo</button>
+                      <button type="button" data-role="choose-photo" tabindex="-1"><span>▧</span> Choose from Photo Library</button>
                       <small>Cancel</small>
                     </div>
-                    <span class="camera-flash" data-role="camera-flash" aria-hidden="true"></span>
                     <div class="photo-crop-modal" data-role="crop-modal" hidden>
+                      <span class="crop-editor-eyebrow">Owner photo editor</span>
                       <strong>Frame your product photo</strong>
                       <p>Keep the product inside the square. Drag to reposition, then zoom if needed.</p>
-                      <div class="crop-canvas"><img src="assets/khaya/carrot-cake-muffins.svg" alt="New product preview"><span></span></div>
+                      <div class="crop-canvas"><img data-role="crop-image" src="assets/khaya/moist-chocolate-cake.jpeg" alt="Moist Chocolate Cake crop preview"><span></span></div>
+                      <b class="crop-zoom-label">Zoom</b>
                       <div class="crop-controls"><button type="button" tabindex="-1">−</button><i><b data-role="zoom-level"></b></i><button type="button" tabindex="-1">+</button></div>
+                      <small class="crop-hint">Drag to reposition. Pinch or use the zoom control to resize.</small>
                       <div class="crop-actions"><button type="button" tabindex="-1">Cancel</button><button type="button" data-role="use-photo" tabindex="-1">Use this photo</button></div>
                     </div>
                   </div>
@@ -119,10 +128,14 @@
                   <div class="khaya-visitor">
                     <header class="khaya-nav"><span class="khaya-home"><img src="assets/khaya/favicon.svg" alt=""></span><span class="khaya-brand"><strong>Khaya Kos</strong><small>Gazebo Valley</small></span><span class="khaya-menu" aria-hidden="true"><i></i><i></i><i></i></span></header>
                     <section class="khaya-menu-view">
-                      <div class="khaya-heading"><span>Available to order all week</span><strong>The Full Menu</strong><p>Likes update live for everyone.</p></div>
-                      <article class="khaya-card" data-role="visitor-card">
-                        <div class="khaya-card-photo" data-role="visitor-photo"><img data-role="visitor-image" src="assets/khaya/cappuccino-muffins.svg" alt="Cappuccino Muffins"><h3 data-role="visitor-name">Cappuccino Muffins</h3></div>
-                        <div class="khaya-card-body"><ul data-role="visitor-description"><li>Coffee-swirled sponge, whipped topping</li><li>Baked fresh to order</li></ul><div class="khaya-card-footer"><span class="khaya-price" data-role="visitor-price">R18</span><span class="khaya-like"><span>♡</span><b>0</b></span></div></div>
+                      <div class="khaya-heading"><span>Available to order all week</span><strong>The Full Menu</strong><p>A new item is being added live.</p></div>
+                      <article class="khaya-card live-new-item" data-role="visitor-card">
+                        <div class="khaya-card-photo" data-role="visitor-photo">
+                          <div class="visitor-photo-placeholder" data-role="visitor-placeholder"><i></i><span>New product loading…</span></div>
+                          <img data-role="visitor-image" src="assets/khaya/moist-chocolate-cake.jpeg" alt="Moist Chocolate Cake" hidden>
+                          <h3 data-role="visitor-name">New Item</h3>
+                        </div>
+                        <div class="khaya-card-body"><p class="visitor-live-description" data-role="visitor-description">Product details will appear here.</p><div class="khaya-card-footer"><span class="khaya-price visitor-live-price" data-role="visitor-price">R0</span><span class="khaya-like"><span>♡</span><b>0</b></span></div></div>
                       </article>
                     </section>
                   </div>
