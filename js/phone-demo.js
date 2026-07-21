@@ -318,6 +318,7 @@ function playProduct(root, roles, timers) {
     root.classList.add("is-complete");
     setStatus(roles, "The final sale triggers Sold Out on both devices in real time.");
   });
+  schedule(timers, 10000, () => setHidden(roles.salesToast, true));
 }
 
 function resetLikes(root, roles) {
