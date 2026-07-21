@@ -157,21 +157,52 @@
       <article class="demo-chapter demo-chapter-product" data-demo-chapter="product">
         <div class="wrap chapter-grid">
           <div class="chapter-copy">
-            <span class="chapter-number">02 · PRODUCTS</span>
-            <h2>Change a price while customers browse.</h2>
-            <p>Everyday updates stay simple. Change the price, record the last sale, and the customer sees a clear sold-out state without refreshing.</p>
+            <span class="chapter-number">02 · LIVE MARKET STOCK</span>
+            <h2>Five left. Then sold out—live.</h2>
+            <p>As Strawberry Cupcakes sell at the market, the owner records each sale. Customers see the remaining stock, sale notices and sold-out state immediately.</p>
             <div class="chapter-status" aria-live="polite"><i></i><span data-role="status">Waiting for this demo to enter view…</span></div>
             <button class="replay-button" type="button" data-role="replay">↻ Replay this demo</button>
           </div>
-          <div class="chapter-visual single-phone-visual">
-            <div class="owner-control-card" data-role="owner-control"><span>OWNER EDIT MODE</span><label>Price (rand)<b data-role="owner-price">18</b></label><button type="button" tabindex="-1"><i>−</i><strong data-role="owner-stock">1</strong><i>+</i></button></div>
-            <div class="phone-stage">
+          <div class="chapter-visual dual-phone-visual product-dual-visual">
+            <div class="phone-stage product-owner-stage">
               <div class="phone-shadow"></div>
-              <div class="phone chapter-phone"><div class="island"></div><div class="phone-screen"><div class="screen-bar"><span>9:41</span><span>5G&nbsp;&nbsp;●</span></div>
-                <div class="khaya-visitor"><header class="khaya-nav"><span class="khaya-home"><img src="assets/khaya/favicon.svg" alt=""></span><span class="khaya-brand"><strong>Khaya Kos</strong><small>Gazebo Valley</small></span><span class="khaya-menu" aria-hidden="true"><i></i><i></i><i></i></span></header><section class="khaya-menu-view"><div class="khaya-heading"><span>Available to order all week</span><strong>The Full Menu</strong><p>Freshly made, just for you.</p></div><article class="khaya-card" data-role="product-card"><div class="khaya-card-photo"><img src="assets/khaya/cappuccino-muffins.svg" alt="Cappuccino Muffins"><h3>Cappuccino Muffins</h3></div><div class="khaya-card-body"><ul><li>Coffee-swirled sponge, whipped topping</li><li>Baked fresh to order</li></ul><div class="khaya-card-footer"><span class="khaya-price" data-role="product-price">R18</span><span class="khaya-like"><span>♡</span><b>0</b></span></div></div><span class="khaya-sold">Sold<br>Out</span></article></section></div><div class="screen-home"></div>
+              <div class="phone chapter-phone"><div class="phone-screen">
+                <div class="product-owner-mobile">
+                  <header class="owner-mobile-nav"><img src="assets/khaya/favicon.svg" alt=""><strong>Owner edit mode</strong><button type="button" tabindex="-1">Exit edit mode</button></header>
+                  <div class="market-edit-banner"><i></i><strong>Live market inventory</strong><span>Stock changes publish instantly</span></div>
+                  <article class="market-owner-card" data-role="product-owner-card">
+                    <div class="market-owner-photo"><img src="assets/khaya/strawberry-cupcake.jpg" alt="Strawberry Cupcake"><span class="market-sold-stamp" data-role="owner-sold-stamp">Sold<br>Out</span></div>
+                    <div class="market-owner-fields">
+                      <label>Price (rand)<input value="15" readonly tabindex="-1"></label>
+                      <label>Product name<input value="Strawberry Cupcake" readonly tabindex="-1"></label>
+                      <label>Description<textarea readonly tabindex="-1">Delicious moist strawberry cupcakes</textarea></label>
+                      <span class="stock-label">Stock available</span>
+                      <div class="stock-stepper"><button type="button" data-role="owner-minus" tabindex="-1" aria-label="Record one Strawberry Cupcake sold">−</button><strong data-role="owner-stock">5</strong><button type="button" tabindex="-1" aria-label="Add one Strawberry Cupcake back">+</button></div>
+                    </div>
+                  </article>
+                </div>
               </div></div>
-              <span class="phone-label phone-label-live">Visitor’s phone</span>
+              <span class="phone-label" data-role="product-owner-label">Owner edit mode</span>
             </div>
+
+            <div class="phone-stage product-visitor-stage">
+              <div class="phone-shadow"></div>
+              <div class="phone chapter-phone"><div class="phone-screen">
+                <div class="market-visitor-mobile">
+                  <header class="khaya-nav"><span class="khaya-home"><img src="assets/khaya/favicon.svg" alt=""></span><span class="khaya-brand"><strong>Khaya Kos</strong><small>Gazebo Valley</small></span><span class="khaya-menu" aria-hidden="true"><i></i><i></i><i></i></span></header>
+                  <div class="market-visitor-content">
+                    <div class="market-open-banner"><i></i><strong>Open now</strong><span>at Gazebo Valley</span><small>View map and directions</small></div>
+                    <div class="market-sale-toast" data-role="sales-toast" hidden>🧁 3 × Strawberry Cupcakes just sold at the market!</div>
+                    <article class="market-product-card" data-role="visitor-product-card">
+                      <div class="market-product-photo"><img src="assets/khaya/strawberry-cupcake.jpg" alt="Strawberry Cupcake"><h3>Strawberry Cupcake</h3><span class="market-sold-stamp" data-role="visitor-sold-stamp">Sold<br>Out</span></div>
+                      <div class="market-product-body"><p>Delicious moist strawberry cupcakes</p><div><span class="market-price">R15</span><strong class="market-stock-pill" data-role="visitor-stock">5 left</strong></div></div>
+                    </article>
+                  </div>
+                </div>
+              </div></div>
+              <span class="phone-label phone-label-live" data-role="product-visitor-label">Visitor’s phone</span>
+            </div>
+            <span class="realtime-beam product-realtime-beam" data-role="product-beam" aria-hidden="true">Stock update →</span>
           </div>
         </div>
       </article>

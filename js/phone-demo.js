@@ -232,42 +232,92 @@ function playPhoto(root, roles, timers) {
 
 function resetProduct(root, roles) {
   root.classList.remove("is-complete");
-  roles.ownerControl.classList.remove("is-editing", "is-sold");
-  roles.ownerPrice.textContent = "18";
-  roles.ownerStock.textContent = "1";
-  roles.productPrice.textContent = "R18";
-  roles.productPrice.classList.remove("is-changing");
-  roles.productCard.classList.remove("is-sold-out", "is-live-updated");
-  setStatus(roles, "The customer currently sees R18 and one item remaining.");
+  roles.ownerStock.textContent = "5";
+  roles.visitorStock.textContent = "5 left";
+  roles.ownerMinus.classList.remove("is-tapped");
+  roles.productOwnerCard.classList.remove("is-sold-out");
+  roles.visitorProductCard.classList.remove("is-sold-out", "is-live-updated");
+  roles.ownerSoldStamp.classList.remove("is-visible");
+  roles.visitorSoldStamp.classList.remove("is-visible");
+  roles.productBeam.classList.remove("is-sending");
+  roles.productVisitorLabel.textContent = "Visitor’s phone";
+  roles.productVisitorLabel.classList.remove("is-updated");
+  roles.productOwnerLabel.textContent = "Owner edit mode";
+  setHidden(roles.salesToast, true);
+  roles.salesToast.classList.remove("is-sold-out");
+  setStatus(roles, "The market is open with 5 Strawberry Cupcakes left.");
+}
+
+function pulseStockUpdate(roles, label) {
+  roles.ownerMinus.classList.remove("is-tapped");
+  roles.productBeam.classList.remove("is-sending");
+  void roles.ownerMinus.offsetWidth;
+  roles.ownerMinus.classList.add("is-tapped");
+  roles.productBeam.classList.add("is-sending");
+  roles.productVisitorLabel.textContent = label;
+  roles.productVisitorLabel.classList.add("is-updated");
+}
+
+function setProductStock(roles, amount) {
+  roles.ownerStock.textContent = String(amount);
+  roles.visitorStock.textContent = amount === 0 ? "Sold out" : `${amount} left`;
+  if (amount === 0) {
+    roles.productOwnerCard.classList.add("is-sold-out");
+    roles.visitorProductCard.classList.add("is-sold-out", "is-live-updated");
+    roles.ownerSoldStamp.classList.add("is-visible");
+    roles.visitorSoldStamp.classList.add("is-visible");
+  }
+}
+
+function showSalesToast(roles, message, soldOut = false) {
+  roles.salesToast.textContent = message;
+  roles.salesToast.classList.toggle("is-sold-out", soldOut);
+  setHidden(roles.salesToast, false);
 }
 
 function playProduct(root, roles, timers) {
   resetProduct(root, roles);
-  const finish = () => {
-    roles.ownerStock.textContent = "0";
-    roles.ownerControl.classList.add("is-sold");
-    roles.productCard.classList.add("is-sold-out", "is-live-updated");
-    root.classList.add("is-complete");
-    setStatus(roles, "The last sale is recorded and the visitor sees Sold Out.");
-  };
   if (reducedMotion) {
-    roles.ownerPrice.textContent = "20";
-    roles.productPrice.textContent = "R20";
-    finish();
+    setProductStock(roles, 0);
+    showSalesToast(roles, "🧁 Strawberry Cupcakes are sold out!", true);
+    roles.productVisitorLabel.textContent = "Sold out live";
+    roles.productVisitorLabel.classList.add("is-updated");
+    root.classList.add("is-complete");
     return;
   }
-  schedule(timers, 1000, () => {
-    roles.ownerControl.classList.add("is-editing");
-    roles.ownerPrice.textContent = "20";
-    setStatus(roles, "The owner changes the price from R18 to R20.");
+
+  schedule(timers, 1100, () => {
+    setProductStock(roles, 4);
+    pulseStockUpdate(roles, "4 left · updated live");
+    setStatus(roles, "First sale recorded: 4 cupcakes remain on both phones.");
   });
-  schedule(timers, 2200, () => {
-    roles.productPrice.textContent = "R20";
-    roles.productPrice.classList.add("is-changing");
-    roles.productCard.classList.add("is-live-updated");
-    setStatus(roles, "R20 appears on the visitor’s phone without a refresh.");
+  schedule(timers, 2050, () => {
+    setProductStock(roles, 3);
+    pulseStockUpdate(roles, "3 left · updated live");
+    setStatus(roles, "Second sale recorded: the visitor immediately sees 3 left.");
   });
-  schedule(timers, 4200, finish);
+  schedule(timers, 3000, () => {
+    setProductStock(roles, 2);
+    pulseStockUpdate(roles, "2 left · updated live");
+    setStatus(roles, "The third minus tap updates the live stock to 2.");
+  });
+  schedule(timers, 3550, () => {
+    showSalesToast(roles, "🧁 3 × Strawberry Cupcakes just sold at the market!");
+    setStatus(roles, "Visitors are told that 3 Strawberry Cupcakes just sold.");
+  });
+  schedule(timers, 5850, () => setHidden(roles.salesToast, true));
+  schedule(timers, 6600, () => {
+    setProductStock(roles, 1);
+    pulseStockUpdate(roles, "1 left · updated live");
+    setStatus(roles, "Another sale leaves only 1 Strawberry Cupcake.");
+  });
+  schedule(timers, 7700, () => {
+    setProductStock(roles, 0);
+    pulseStockUpdate(roles, "Sold out live");
+    showSalesToast(roles, "🧁 Strawberry Cupcakes are sold out!", true);
+    root.classList.add("is-complete");
+    setStatus(roles, "The final sale triggers Sold Out on both devices in real time.");
+  });
 }
 
 function resetLikes(root, roles) {

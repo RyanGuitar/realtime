@@ -1047,6 +1047,63 @@ footer { padding: 34px 0 45px; border-top: 1px solid var(--line); }
 .owner-finished-view { animation: ownerToVisitor .65s ease both; }
 @keyframes ownerToVisitor { from { opacity: 0; transform: scale(.96); } }
 
+/* Live market stock demonstration */
+.product-dual-visual { width: 620px; min-height: 700px; }
+.product-owner-stage { height: 676px; }
+.product-owner-stage .chapter-phone { height: 650px; }
+.product-visitor-stage { position: absolute; z-index: 8; right: -8px; bottom: 0; transform: scale(.8) rotate(4deg); transform-origin: bottom right; }
+.product-owner-mobile,
+.market-visitor-mobile { position: relative; height: 100%; overflow: hidden; font-family: "Nunito", sans-serif; }
+.product-owner-mobile { background: #0e6b61; }
+.market-edit-banner { display: grid; min-height: 31px; grid-template-columns: 7px auto 1fr; align-items: center; gap: 6px; padding: 5px 10px; color: #124d48; border-bottom: 1px solid #bcdcd7; background: #e4f3ef; font-size: .46rem; }
+.market-edit-banner i { width: 7px; height: 7px; border-radius: 50%; background: #078e78; box-shadow: 0 0 0 4px rgba(7,142,120,.13); }
+.market-edit-banner span { color: #60807b; text-align: right; }
+.market-owner-card { position: relative; height: calc(100% - 85px); margin: 0 9px 9px; overflow: hidden; border: 2px solid #00857a; border-radius: 0 0 15px 15px; background: #fff; }
+.market-owner-photo,
+.market-product-photo { position: relative; overflow: hidden; aspect-ratio: 1; }
+.market-owner-photo { height: 225px; aspect-ratio: auto; }
+.market-owner-photo img,
+.market-product-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 44%; transition: filter .45s ease, opacity .45s ease; }
+.market-owner-fields { padding: 8px 11px 10px; }
+.market-owner-fields label { display: grid; gap: 2px; margin-top: 6px; color: #17334e; font-size: .43rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.market-owner-fields input,
+.market-owner-fields textarea { width: 100%; padding: 0 7px; border: 1px solid #9eacb8; border-radius: 7px; color: #17202b; background: #fff; font: 800 .58rem "Nunito", sans-serif; }
+.market-owner-fields input { height: 27px; }
+.market-owner-fields textarea { height: 40px; padding-top: 6px; resize: none; font-weight: 700; }
+.stock-label { display: block; margin-top: 8px; color: #17334e; font-size: .47rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.stock-stepper { display: grid; grid-template-columns: 38px 1fr 38px; align-items: center; gap: 8px; margin-top: 5px; }
+.stock-stepper button { display: grid; width: 38px; height: 38px; place-items: center; border: 2px solid #173f61; border-radius: 50%; color: #173f61; background: #fff; font: 800 1rem var(--sans); }
+.stock-stepper button.is-tapped { color: #fff; background: #173f61; animation: stockMinusTap .55s ease; }
+.stock-stepper strong { display: grid; height: 38px; place-items: center; border: 1px solid #9eacb8; border-radius: 7px; color: #17202b; font-size: .72rem; }
+@keyframes stockMinusTap { 50% { transform: scale(.84); } }
+.market-sold-stamp { position: absolute; z-index: 8; left: 50%; top: 50%; display: grid; width: 78px; height: 62px; place-items: center; opacity: 0; border: 5px solid #ad2d25; border-radius: 8px; color: #99271f; background: rgba(255,255,255,.94); font: 800 .84rem/.92 "Baloo 2", sans-serif; text-align: center; transform: translate(-50%,-50%) rotate(-12deg) scale(1.6); transition: opacity .35s ease, transform .5s cubic-bezier(.2,.8,.2,1.35); }
+.market-sold-stamp.is-visible { opacity: 1; transform: translate(-50%,-50%) rotate(-12deg) scale(1); }
+.market-owner-card.is-sold-out .market-owner-photo img,
+.market-product-card.is-sold-out .market-product-photo img { filter: grayscale(.72) brightness(.62); }
+
+.market-visitor-mobile { color: #17334e; background: linear-gradient(145deg,#0d6e63,#124d4c); }
+.market-visitor-content { position: relative; height: calc(100% - 51px); overflow: hidden; padding: 17px 10px 16px; }
+.market-open-banner { display: grid; min-height: 69px; grid-template-columns: 8px auto 1fr; align-content: center; align-items: center; gap: 5px 7px; padding: 10px; border: 1px solid #f1cf5e; border-radius: 18px; color: #fff; background: #092b3d; font-size: .56rem; text-align: center; }
+.market-open-banner i { width: 8px; height: 8px; border-radius: 50%; background: #b83b34; }
+.market-open-banner strong { color: #ffe077; font-size: .67rem; }
+.market-open-banner small { grid-column: 1 / -1; color: #fff; font-size: .52rem; font-weight: 800; }
+.market-product-card { margin-top: 14px; overflow: hidden; border-radius: 15px; background: #fff; box-shadow: 0 9px 22px rgba(0,0,0,.2); transition: box-shadow .4s ease; }
+.market-product-photo h3 { position: absolute; z-index: 4; top: 0; left: 0; max-width: 80%; margin: 0; padding: 9px 11px; border-radius: 0 0 11px 0; color: #fff; background: #c95618; font: 800 .66rem "Baloo 2", sans-serif; }
+.market-product-body { padding: 12px; }
+.market-product-body p { min-height: 38px; margin: 0; color: #56616e; font-size: .61rem; line-height: 1.4; }
+.market-product-body > div { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.market-price,
+.market-stock-pill { display: grid; min-width: 54px; min-height: 42px; place-items: center; padding: 0 10px; border-radius: 13px; font: 800 .7rem "Baloo 2", sans-serif; }
+.market-price { background: #ffe17d; }
+.market-stock-pill { color: #075b31; background: #dff4e7; }
+.market-product-card.is-sold-out .market-stock-pill { color: #94271f; background: #fae3e0; animation: soldStockIn .55s ease; }
+@keyframes soldStockIn { 45% { transform: scale(1.13); } }
+.market-sale-toast { position: absolute; z-index: 15; top: 92px; left: 12px; right: 12px; padding: 10px 12px; border: 2px solid #f1cf5e; border-radius: 13px; color: #fff; background: #0e3353; box-shadow: 0 12px 25px rgba(0,0,0,.28); font-size: .6rem; font-weight: 800; line-height: 1.35; text-align: center; animation: marketSaleToastIn .55s ease both; }
+.market-sale-toast.is-sold-out { color: #fff6d3; background: #8e2821; }
+@keyframes marketSaleToastIn { from { opacity: 0; transform: translateY(-12px) scale(.96); } }
+.market-product-card.is-live-updated { box-shadow: 0 0 0 7px rgba(201,245,92,.48), 0 9px 22px rgba(0,0,0,.2); }
+.product-realtime-beam { left: 260px; top: 315px; }
+
 .owner-control-card { position: absolute; z-index: 12; left: 10px; top: 150px; width: 190px; padding: 14px; border: 1px solid #d7dee2; border-radius: 15px; background: rgba(255,255,255,.96); box-shadow: 0 18px 42px rgba(24,41,53,.18); transform: rotate(-3deg); }
 .owner-control-card > span { color: #3f754c; font-size: .51rem; font-weight: 800; letter-spacing: .1em; }
 .owner-control-card label { display: flex; align-items: center; justify-content: space-between; margin-top: 9px; color: #657079; font-size: .58rem; font-weight: 800; }
@@ -1104,6 +1161,10 @@ footer { padding: 34px 0 45px; border-top: 1px solid var(--line); }
   .dual-phone-visual { width: 360px; max-width: calc(100vw - 24px); min-height: 600px; }
   .dual-phone-visual .owner-stage { left: -12px; transform: scale(.82) rotate(-2deg); transform-origin: top left; }
   .dual-phone-visual .visitor-stage { right: -8px; bottom: 6px; transform: scale(.62) rotate(5deg); }
+  .product-dual-visual { width: 360px; max-width: calc(100vw - 24px); min-height: 620px; }
+  .product-owner-stage { left: -12px; transform: scale(.82) rotate(-2deg); transform-origin: top left; }
+  .product-visitor-stage { right: -8px; bottom: 3px; transform: scale(.62) rotate(5deg); }
+  .product-realtime-beam { left: 134px; top: 315px; font-size: .58rem; }
   .realtime-beam { left: 134px; top: 305px; font-size: .58rem; }
   .owner-control-card, .market-owner-toggle { left: 50%; top: 34px; transform: translateX(-92%) rotate(-3deg) scale(.84); transform-origin: center; }
   .owner-control-card.is-editing { transform: translateX(-92%) rotate(-3deg) scale(.84); }
